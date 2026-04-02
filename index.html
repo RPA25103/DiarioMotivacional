@@ -15,9 +15,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
-    /* ══════════════════════════════════════════════════
-       1. VARIÁVEIS CSS — todos os tokens de design
-    ══════════════════════════════════════════════════ */
     :root {
       --green-deep: #1a4a1e;
       --green-mid:  #2e7d32;
@@ -84,9 +81,6 @@
       --shadow-lg:0 16px 60px rgba(0,0,0,0.5);
     }
 
-    /* ══════════════════════════════════════════════════
-       2. RESET & BASE
-    ══════════════════════════════════════════════════ */
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{
@@ -101,9 +95,6 @@
       pointer-events:none;z-index:0;opacity:0.5;
     }
 
-    /* ══════════════════════════════════════════════════
-       3. HEADER
-    ══════════════════════════════════════════════════ */
     header{
       background:var(--grad);color:#fff;
       padding:96px 24px 80px;text-align:center;
@@ -159,9 +150,6 @@
     @keyframes fadeDown{from{opacity:0;transform:translateY(-22px)}to{opacity:1;transform:translateY(0)}}
     @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
 
-    /* ══════════════════════════════════════════════════
-       4. NAV
-    ══════════════════════════════════════════════════ */
     nav.main-nav{
       background:var(--nav-bg);backdrop-filter:blur(14px);
       position:sticky;top:0;z-index:100;
@@ -173,15 +161,9 @@
     nav.main-nav a:hover{color:var(--green-mid);background:rgba(76,175,80,.08)}
     nav.main-nav a.active{color:var(--green-mid);background:rgba(76,175,80,.1);font-weight:600}
 
-    /* ══════════════════════════════════════════════════
-       5. LAYOUT
-    ══════════════════════════════════════════════════ */
     .container{max-width:860px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
     section{padding:52px 0}
 
-    /* ══════════════════════════════════════════════════
-       6. CARDS
-    ══════════════════════════════════════════════════ */
     .card{
       background:var(--card-bg);border-radius:var(--radius);
       padding:44px;box-shadow:var(--shadow);
@@ -201,9 +183,6 @@
     h2 .icon{font-size:1.4rem}
     p.lead{color:var(--text-mid);font-size:.97rem;line-height:1.75}
 
-    /* ══════════════════════════════════════════════════
-       7. QUOTE / FRASE
-    ══════════════════════════════════════════════════ */
     .frase-container{position:relative;margin:28px 0;padding:36px 32px;background:var(--grad-soft);border-radius:16px;overflow:hidden;transition:var(--transition)}
     .frase-container::before{content:'\201C';position:absolute;top:-14px;left:14px;font-family:'Playfair Display',serif;font-size:110px;color:rgba(255,255,255,.22);line-height:1;pointer-events:none}
     .fav-btn{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.25);border:none;border-radius:50%;width:36px;height:36px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);z-index:2}
@@ -217,9 +196,6 @@
     .pill{padding:4px 12px;border-radius:50px;font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:var(--transition);border:1px solid var(--border);background:var(--cream2);color:var(--text-mid)}
     .pill:hover,.pill.active{background:var(--green-mid);color:#fff;border-color:var(--green-mid)}
 
-    /* ══════════════════════════════════════════════════
-       8. BOTÕES
-    ══════════════════════════════════════════════════ */
     .btn-primary{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;background:var(--grad);color:#fff;border:none;border-radius:12px;font-weight:600;font-size:.95rem;font-family:inherit;cursor:pointer;transition:var(--transition);box-shadow:0 4px 18px rgba(46,125,50,.28)}
     .btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(46,125,50,.38)}
     .btn-primary:active{transform:translateY(-1px)}
@@ -234,9 +210,6 @@
     .contador{color:var(--text-soft);font-size:.85rem;font-weight:500}
     .contador strong{color:var(--green-mid)}
 
-    /* ══════════════════════════════════════════════════
-       9. IA LOADING
-    ══════════════════════════════════════════════════ */
     .ai-loading{display:none;align-items:center;gap:10px;color:var(--text-soft);font-size:.88rem;font-weight:500;margin-top:12px}
     .ai-loading.show{display:flex}
     .ai-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green-soft);animation:dotBounce 1.2s infinite}
@@ -255,23 +228,14 @@
     .ai-toggle-label{font-size:.85rem;font-weight:600;color:var(--text-mid)}
     .ai-toggle-label span{color:var(--green-mid)}
 
-    /* ══════════════════════════════════════════════════
-       10. COPY TOAST
-    ══════════════════════════════════════════════════ */
     .copy-toast{display:none;background:var(--green-deep);color:#fff;font-size:.78rem;padding:5px 13px;border-radius:50px;font-weight:600;animation:fadeUp .3s ease}
     .copy-toast.show{display:inline-block}
 
-    /* ══════════════════════════════════════════════════
-       11. STREAK
-    ══════════════════════════════════════════════════ */
     .streak-row{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;align-items:center}
     .streak-dot{width:12px;height:12px;border-radius:50%;background:var(--sand);border:2px solid var(--border);transition:var(--transition)}
     .streak-dot.filled{background:var(--green-soft);border-color:var(--green-mid)}
     .streak-label{color:var(--text-soft);font-size:.82rem;font-weight:500}
 
-    /* ══════════════════════════════════════════════════
-       12. FAVORITOS
-    ══════════════════════════════════════════════════ */
     .favorites-section{margin-top:32px}
     .favorites-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
     .favorites-header h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);display:flex;align-items:center;gap:8px}
@@ -290,9 +254,6 @@
     .fav-remove:hover{color:var(--error);background:rgba(198,40,40,.08)}
     .fav-actions{display:flex;gap:8px;flex-wrap:wrap}
 
-    /* ══════════════════════════════════════════════════
-       13. MODO FOCO
-    ══════════════════════════════════════════════════ */
     .focus-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(8,16,10,.97);backdrop-filter:blur(24px);align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px 20px}
     .focus-overlay.show{display:flex;animation:focusIn .5s ease}
     @keyframes focusIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
@@ -309,9 +270,6 @@
     .focus-particle{position:absolute;border-radius:50%;background:rgba(76,175,80,.35);animation:particleFloat linear infinite}
     @keyframes particleFloat{0%{transform:translateY(110vh);opacity:0}10%{opacity:1}90%{opacity:.6}100%{transform:translateY(-50px) rotate(360deg);opacity:0}}
 
-    /* ══════════════════════════════════════════════════
-       14. GRÁFICO
-    ══════════════════════════════════════════════════ */
     .chart-wrap{margin-top:20px;padding:24px;background:var(--cream2);border-radius:16px;border:1px solid var(--border)}
     body.dark .chart-wrap{background:var(--sand)}
     .chart-bars{display:flex;align-items:flex-end;gap:8px;height:130px;padding-bottom:32px;position:relative}
@@ -330,9 +288,6 @@
     .p-stat-num{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--green-mid)}
     .p-stat-label{font-size:.72rem;color:var(--text-soft);text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin-top:3px}
 
-    /* ══════════════════════════════════════════════════
-       15. NOTIFICAÇÕES / TEMAS / DEPOIMENTOS / ETC
-    ══════════════════════════════════════════════════ */
     .notif-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;background:var(--cream2);border:1px solid var(--border);border-radius:14px;margin-top:20px;flex-wrap:wrap}
     body.dark .notif-row{background:var(--sand)}
     .notif-info{flex:1}
@@ -446,14 +401,12 @@
       .focus-timer{font-size:2.2rem}
     }
 
-    /* ══════════════════════════════════════════════════
-       16. CHATBOT — WIDGET FLUTUANTE
-    ══════════════════════════════════════════════════ */
-
-    /* Botão flutuante que abre o chat */
+    /* ══════════════════════════════════════════
+       CHATBOT WIDGET
+    ══════════════════════════════════════════ */
     .chat-fab {
       position: fixed;
-      bottom: 90px;           /* acima do scroll-top */
+      bottom: 90px;
       right: 28px;
       width: 58px;
       height: 58px;
@@ -493,8 +446,6 @@
       from { transform: scale(0); }
       to   { transform: scale(1); }
     }
-
-    /* Janela do chat */
     .chat-window {
       position: fixed;
       bottom: 160px;
@@ -523,8 +474,6 @@
       .chat-window { width: calc(100vw - 24px); right: 12px; bottom: 150px; max-height: 480px; }
       .chat-fab { right: 16px; bottom: 80px; }
     }
-
-    /* Cabeçalho do chat */
     .chat-header {
       background: var(--grad);
       padding: 18px 20px;
@@ -575,8 +524,6 @@
       transition: background .2s;
     }
     .chat-close-btn:hover { background: rgba(255,255,255,.35); }
-
-    /* Área de mensagens */
     .chat-messages {
       flex: 1;
       overflow-y: auto;
@@ -589,8 +536,6 @@
     .chat-messages::-webkit-scrollbar { width: 4px; }
     .chat-messages::-webkit-scrollbar-track { background: transparent; }
     .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-    /* Mensagem individual */
     .chat-msg {
       display: flex;
       gap: 9px;
@@ -601,7 +546,6 @@
       to   { opacity:1; transform:translateY(0) scale(1); }
     }
     .chat-msg.user { flex-direction: row-reverse; }
-
     .chat-msg-avatar {
       width: 32px; height: 32px;
       border-radius: 50%;
@@ -612,7 +556,6 @@
       align-self: flex-end;
     }
     .chat-msg.user .chat-msg-avatar { background: var(--grad); }
-
     .chat-bubble {
       max-width: 78%;
       padding: 11px 15px;
@@ -640,8 +583,6 @@
       display: block;
     }
     .chat-msg.user .chat-bubble-time { text-align: right; }
-
-    /* Chips de sugestão rápida */
     .chat-suggestions {
       display: flex;
       gap: 7px;
@@ -662,8 +603,6 @@
       white-space: nowrap;
     }
     .chat-chip:hover { background: var(--green-mid); color: #fff; }
-
-    /* Indicador de digitação */
     .chat-typing {
       display: none;
       align-items: center;
@@ -691,8 +630,6 @@
       0%,60%,100% { transform: translateY(0); }
       30%          { transform: translateY(-6px); }
     }
-
-    /* Campo de entrada */
     .chat-input-area {
       padding: 14px 16px;
       border-top: 1px solid var(--border);
@@ -735,11 +672,32 @@
     }
     .chat-send-btn:hover { transform: scale(1.1); box-shadow: 0 6px 18px rgba(46,125,50,.45); }
     .chat-send-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    /* Badge de modo IA no chat */
+    .chat-ai-mode-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.8);
+      background: rgba(255,255,255,.15);
+      padding: 2px 8px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,.25);
+      margin-top: 4px;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .chat-ai-mode-badge:hover { background: rgba(255,255,255,.25); }
+    .chat-ai-mode-badge.local { opacity: .7; }
   </style>
 </head>
 <body>
 
-  <!-- ═══ MODO FOCO ═══ -->
+  <!-- MODO FOCO -->
   <div class="focus-overlay" id="focus-overlay" role="dialog" aria-modal="true" aria-label="Modo Foco">
     <div class="focus-particles" id="focus-particles"></div>
     <div class="focus-quote-box">
@@ -754,16 +712,13 @@
     </div>
   </div>
 
-  <!-- ═══ CHATBOT WIDGET ═══ -->
-  <!-- Botão flutuante para abrir o chat -->
+  <!-- CHATBOT WIDGET -->
   <button class="chat-fab" id="chat-fab" aria-label="Abrir assistente virtual" title="Fale com o assistente">
     🌿
     <span class="chat-fab-badge" id="chat-badge">1</span>
   </button>
 
-  <!-- Janela do chat -->
   <div class="chat-window" id="chat-window" role="dialog" aria-modal="true" aria-label="Assistente Virtual">
-    <!-- Cabeçalho -->
     <div class="chat-header">
       <div class="chat-avatar">🌿</div>
       <div class="chat-header-info">
@@ -773,16 +728,14 @@
           <span class="chat-status-dot"></span>
           <span data-lang="pt">Online agora</span><span data-lang="en">Online now</span>
         </div>
+        <!-- Badge mostrando modo atual: IA real ou local -->
+        <div class="chat-ai-mode-badge local" id="chat-mode-badge" title="Clique para saber mais">🧠 IA Local</div>
       </div>
       <button class="chat-close-btn" id="chat-close" aria-label="Fechar chat">✕</button>
     </div>
 
-    <!-- Mensagens -->
-    <div class="chat-messages" id="chat-messages">
-      <!-- Mensagem inicial do bot injetada via JS -->
-    </div>
+    <div class="chat-messages" id="chat-messages"></div>
 
-    <!-- Indicador de digitação -->
     <div class="chat-typing" id="chat-typing" style="padding:0 16px 8px">
       <div class="chat-msg-avatar">🌿</div>
       <div class="chat-typing-dots">
@@ -792,7 +745,6 @@
       </div>
     </div>
 
-    <!-- Chips de sugestão rápida -->
     <div class="chat-suggestions" id="chat-suggestions">
       <button class="chat-chip" data-msg-pt="Quero uma frase motivacional" data-msg-en="Give me a motivational quote">💬 <span data-lang="pt">Frase do dia</span><span data-lang="en">Daily quote</span></button>
       <button class="chat-chip" data-msg-pt="Como uso o Modo Foco?" data-msg-en="How do I use Focus Mode?">🎯 <span data-lang="pt">Modo Foco</span><span data-lang="en">Focus Mode</span></button>
@@ -800,7 +752,6 @@
       <button class="chat-chip" data-msg-pt="Quero fazer uma parceria" data-msg-en="I want to discuss a partnership">🤝 <span data-lang="pt">Parceria</span><span data-lang="en">Partnership</span></button>
     </div>
 
-    <!-- Input -->
     <div class="chat-input-area">
       <textarea class="chat-input" id="chat-input"
         data-placeholder-pt="Digite sua mensagem..."
@@ -812,7 +763,7 @@
     </div>
   </div>
 
-  <!-- ═══ HEADER ═══ -->
+  <!-- HEADER -->
   <header>
     <div class="container">
       <div class="header-badge">🌿 <span data-lang="pt">Desenvolvimento Pessoal</span><span data-lang="en">Personal Development</span></div>
@@ -830,7 +781,7 @@
     </div>
   </header>
 
-  <!-- ═══ NAV ═══ -->
+  <!-- NAV -->
   <nav class="main-nav" role="navigation" aria-label="Menu principal">
     <ul>
       <li><a href="#inicio"      class="nav-link active"><span data-lang="pt">Início</span><span data-lang="en">Home</span></a></li>
@@ -1076,8 +1027,7 @@
         <div class="message" id="contact-message-box" role="alert"></div>
         <div class="contact-info">
           <div class="contact-item"><span class="ci-icon">📧</span><a href="mailto:rafaelpereiraalmeida25@gmail.com" class="contact-link">rafaelpereiraalmeida25@gmail.com</a></div>
-          <div class="contact-item"><span class="ci-icon">📱</span><a href="https://www.instagram.com/diariomotivacional_official?igsh=MTBkaDlwZWxwYXJmZQ%3D%3D&utm_source=qr" class="contact-link">@diariomotivacional_official
-</a></div>
+          <div class="contact-item"><span class="ci-icon">📱</span><a href="https://www.instagram.com/diariomotivacional_official?igsh=MTBkaDlwZWxwYXJmZQ%3D%3D&utm_source=qr" class="contact-link">@diariomotivacional_official</a></div>
           <div class="contact-item"><span class="ci-icon">📍</span><span class="contact-link" data-lang="pt">Brasil</span><span class="contact-link" data-lang="en">Brazil</span></div>
         </div>
       </article>
@@ -1106,11 +1056,9 @@
   <script>
   'use strict';
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 1 — STORAGE SEGURO
-  // Tenta usar localStorage do navegador. Se falhar (modo privado,
-  // Safari restrito), cria um objeto em memória que imita a API.
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   const safeStorage = (() => {
     try {
       const k = '__test__';
@@ -1129,10 +1077,9 @@
   const lsGet = key => safeStorage.getItem(key);
   const lsSet = (key, v) => { try { safeStorage.setItem(key, v); } catch {} };
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 2 — BANCO DE FRASES LOCAL
-  // Array com objetos: cada um tem versão PT, EN, autor e categoria.
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   const quotes = [
     { pt:'A persistência é o caminho do êxito.',                                    en:'Persistence is the path to success.',                                          author:'Charles Chaplin',     cat:'persistencia' },
     { pt:'Não importa o quão devagar você vá, desde que não pare.',                 en:'It does not matter how slowly you go as long as you do not stop.',              author:'Confúcio',            cat:'persistencia' },
@@ -1183,9 +1130,9 @@
     }, 320);
   }
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 3 — CONTADOR DIÁRIO
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   const getTodayKey = () => new Date().toDateString();
 
   function loadCounter() {
@@ -1202,9 +1149,9 @@
     renderChart();
   }
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 4 — PROGRESSO SEMANAL / GRÁFICO
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   function getWeeklyData() { return JSON.parse(lsGet('weeklyData') || '{}'); }
 
   function saveWeeklyData() {
@@ -1251,9 +1198,9 @@
     document.getElementById('ps-streak').textContent = (sd.count||0)+'🔥';
   }
 
-  // ══════════════════════════════════════════════════════════════
-  // BLOCO 5 — STREAK (sequência de dias)
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
+  // BLOCO 5 — STREAK
+  // ══════════════════════════════════════════════════════════
   function buildStreak() {
     const today     = new Date().toDateString();
     const yesterday = new Date(Date.now()-86400000).toDateString();
@@ -1275,9 +1222,9 @@
     if (ps) ps.textContent = (data.count||0)+'🔥';
   }
 
-  // ══════════════════════════════════════════════════════════════
-  // BLOCO 6 — IA PARA FRASES (chamada via proxy backend)
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
+  // BLOCO 6 — IA PARA FRASES
+  // ══════════════════════════════════════════════════════════
   const catNames = {
     all:         {pt:'motivação geral',            en:'general motivation'},
     persistencia:{pt:'persistência e resiliência', en:'persistence and resilience'},
@@ -1330,9 +1277,9 @@
     });
   });
 
-  // ══════════════════════════════════════════════════════════════
-  // BLOCO 7 — MODO FOCO (fullscreen meditação)
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
+  // BLOCO 7 — MODO FOCO
+  // ══════════════════════════════════════════════════════════
   let focusInterval=null, focusSecs=0, lastFocusedElement=null, focusOpen=false;
 
   function trapFocus(e) {
@@ -1389,9 +1336,9 @@
   document.getElementById('focus-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeFocus();});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&focusOpen)closeFocus();});
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 8 — NOTIFICAÇÕES
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   const notifToggle=document.getElementById('notif-toggle');
 
   function setNotifStatus(on) {
@@ -1410,9 +1357,9 @@
     } else{lsSet('notifEnabled','false');setNotifStatus(false);}
   });
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 9 — TEMAS DE COR
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   function applyColorTheme(t) {
     ['ocean','sunset','lavender'].forEach(x=>document.body.classList.remove('theme-'+x));
     if(t!=='default') document.body.classList.add('theme-'+t);
@@ -1426,9 +1373,9 @@
   });
   applyColorTheme(lsGet('colorTheme')||'default');
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 10 — FAVORITOS
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   const loadFavs=()=>JSON.parse(lsGet('favorites')||'[]');
   const saveFavs=f=>lsSet('favorites',JSON.stringify(f));
 
@@ -1477,9 +1424,9 @@
   document.getElementById('clear-favs').addEventListener('click',()=>{if(confirm(getLang()==='pt'?'Remover todos os favoritos?':'Remove all favorites?')){saveFavs([]);updateFavBtn();renderFavs();}});
   document.getElementById('export-favs').addEventListener('click',()=>{const lang=getLang(),favs=loadFavs();if(!favs.length){alert(lang==='pt'?'Nenhum favorito para exportar.':'No favorites to export.');return;}const lines=favs.map(f=>`"${f[lang]}"\n— ${f.author}`).join('\n\n---\n\n');const blob=new Blob([lines],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);Object.assign(document.createElement('a'),{href:url,download:'favoritos-motivacao.txt'}).click();URL.revokeObjectURL(url);});
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 11 — COMPARTILHAR
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   const getQuoteText=()=>currentQuoteObj?`"${currentQuoteObj[getLang()]}" — ${currentQuoteObj.author}`:'';
 
   document.getElementById('share-whatsapp').addEventListener('click',()=>window.open(`https://wa.me/?text=${encodeURIComponent(getQuoteText()+'\n\n🌿 Diário de Motivação')}`,'_blank'));
@@ -1493,9 +1440,9 @@
 
   function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0;pointer-events:none';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch{}document.body.removeChild(ta);}
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 12 — DARK MODE
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   const themeBtn=document.getElementById('toggle-theme');
 
   function applyTheme(dark) {
@@ -1508,9 +1455,9 @@
   themeBtn.addEventListener('click',()=>applyTheme(!document.body.classList.contains('dark')));
   if(lsGet('theme')==='dark') applyTheme(true);
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 13 — IDIOMA
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   function setLang(lang) {
     document.body.classList.toggle('lang-en',lang==='en');
     document.documentElement.lang=lang==='pt'?'pt-BR':'en';
@@ -1524,7 +1471,6 @@
     applyTheme(document.body.classList.contains('dark'));
     if(currentQuoteObj) showQuote(currentQuoteObj);
     document.querySelectorAll('.message.show').forEach(m=>m.classList.remove('show'));
-    // Atualiza chips e mensagem de boas-vindas do chat
     updateChatLang();
   }
 
@@ -1550,9 +1496,9 @@
 
   if(lsGet('lang')==='en') setLang('en');
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 14 — DIÁRIO LIVRE
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   const diaryTextarea=document.getElementById('diary-textarea');
   const diaryChars=document.getElementById('diary-chars');
   diaryTextarea.addEventListener('input',()=>{diaryChars.textContent=diaryTextarea.value.length;});
@@ -1592,9 +1538,9 @@
     Object.assign(document.createElement('a'),{href:url,download:'meu-diario-motivacao.txt'}).click();URL.revokeObjectURL(url);
   });
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 15 — FORMULÁRIOS
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   document.getElementById('newsletter-form').addEventListener('submit',function(e){
     e.preventDefault();
     const lang=getLang(), email=document.getElementById('newsletter-email').value.trim();
@@ -1625,9 +1571,9 @@
     setTimeout(()=>box.classList.remove('show'),5000);
   });
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 16 — FAQ
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   document.querySelectorAll('.faq-question').forEach(btn=>{
     btn.addEventListener('click',function(){
       const answer=this.nextElementSibling, isOpen=answer.classList.contains('show');
@@ -1638,9 +1584,9 @@
     btn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();btn.click();}});
   });
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 17 — SCROLL / NAV ATIVA
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   const scrollTopBtn=document.getElementById('scroll-top');
   window.addEventListener('scroll',()=>{
     scrollTopBtn.classList.toggle('visible',window.scrollY>300);
@@ -1650,14 +1596,17 @@
   },{passive:true});
   scrollTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 
-  // ══════════════════════════════════════════════════════════════
-  // BLOCO 18 — CHATBOT (NÚCLEO)
-  // Sistema completo: abertura/fechamento, histórico de conversa,
-  // integração com API Anthropic via proxy seguro, chips de atalho,
-  // auto-resize do textarea, suporte bilíngue PT/EN.
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
+  // BLOCO 18 — CHATBOT COMPLETO
+  // ──────────────────────────────────────────────────────────
+  // Arquitetura:
+  //   1. Tenta API Anthropic via proxy /api/chat (se disponível)
+  //   2. Se falhar → usa IA local inteligente com memória
+  //   3. Memória contextual: últimas 5 mensagens influenciam respostas
+  //   4. Sanitização anti-XSS em todas as mensagens
+  //   5. Histórico limitado a 20 entradas (performance)
+  // ══════════════════════════════════════════════════════════
 
-  // — Referências DOM do chat —
   const chatFab      = document.getElementById('chat-fab');
   const chatBadge    = document.getElementById('chat-badge');
   const chatWindow   = document.getElementById('chat-window');
@@ -1667,61 +1616,173 @@
   const chatInput    = document.getElementById('chat-input');
   const chatSend     = document.getElementById('chat-send');
   const chatChips    = document.querySelectorAll('.chat-chip');
+  const chatModeBadge = document.getElementById('chat-mode-badge');
 
-  // — Estado do chat —
   let chatOpen    = false;
-  let chatHistory = [];      // array de {role, content} para a API
-  let chatBusy    = false;   // bloqueia envio durante resposta
+  let chatHistory = [];
+  let chatBusy    = false;
 
-  // — System prompt: personalidade do assistente —
+  // System prompts para a API (quando disponível)
   const CHAT_SYSTEM_PT = `Você é o Assistente Motivacional do "Diário de Motivação", criado por Rafael Pereira Almeida.
-Você responde e-mails, comentários e dúvidas dos visitantes com empatia, clareza e motivação.
-Seu tom é caloroso, encorajador e profissional.
-Você pode: responder dúvidas sobre o site, sugerir frases motivacionais, confirmar recebimento de sugestões de frases, discutir parcerias, e apoiar o usuário emocionalmente.
-Você NÃO tem acesso real ao e-mail ou banco de dados do site — deixe claro isso quando relevante.
+Responda com empatia, clareza e motivação. Tom caloroso, encorajador e profissional.
+Você pode: responder dúvidas sobre o site, sugerir frases motivacionais, confirmar sugestões de frases, discutir parcerias e apoiar emocionalmente o usuário.
+Você NÃO tem acesso real ao e-mail ou banco de dados — deixe claro quando relevante.
 Responda sempre em Português do Brasil, de forma concisa (máximo 3 parágrafos curtos).`;
 
   const CHAT_SYSTEM_EN = `You are the Motivational Assistant of "Diário de Motivação", created by Rafael Pereira Almeida.
-You respond to emails, comments and visitor questions with empathy, clarity and motivation.
-Your tone is warm, encouraging and professional.
-You can: answer questions about the site, suggest motivational quotes, confirm receipt of quote suggestions, discuss partnerships, and emotionally support the user.
-You do NOT have real access to the site's email or database — make this clear when relevant.
+Respond with empathy, clarity, and motivation. Warm, encouraging, professional tone.
+You can: answer site questions, suggest motivational quotes, confirm quote suggestions, discuss partnerships, emotionally support the user.
+You do NOT have real access to email or database — clarify when relevant.
 Always reply in English, concisely (maximum 3 short paragraphs).`;
 
-  // Formata hora atual para o timestamp das mensagens
+  // ── Sanitização anti-XSS ──
+  function sanitize(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // ── Memória contextual (últimas N mensagens) ──
+  function getLastMessages(limit = 5) {
+    return chatHistory.slice(-limit).map(m => m.content.toLowerCase()).join(' ');
+  }
+
+  // ── IA Local Inteligente (funciona 100% sem backend) ──
+  function getSmartResponse(text) {
+    const msg     = text.toLowerCase();
+    const context = getLastMessages();
+    const lang    = getLang();
+
+    // Base de respostas PT/EN
+    const r = {
+      saudacao: {
+        pt: ['🌿 Olá! Que bom te ver aqui 😊 Como você está se sentindo hoje?',
+             '🌱 Bem-vindo! Pronto para sua dose de motivação?'],
+        en: ['🌿 Hello! Great to have you here 😊 How are you feeling today?',
+             '🌱 Welcome! Ready for your dose of motivation?']
+      },
+      tristeza: {
+        pt: ['💛 Eu entendo… momentos assim são difíceis, mas você não está sozinho. Quer me contar o que está acontecendo?',
+             '🌿 Às vezes o coração pesa. Respire fundo — isso vai passar, e você vai sair mais forte.'],
+        en: ['💛 I understand… these moments are tough, but you are not alone. Want to tell me what\'s going on?',
+             '🌿 Sometimes the heart feels heavy. Breathe deep — this shall pass, and you will come out stronger.']
+      },
+      motivacao: {
+        pt: ['🔥 Lembre-se: você já superou dias difíceis antes. Esse também vai passar — e você vai sair mais forte.',
+             '💪 Cada passo, mesmo pequeno, te aproxima do seu objetivo. Continue firme!'],
+        en: ['🔥 Remember: you\'ve overcome hard days before. This one will pass too — and you\'ll come out stronger.',
+             '💪 Every step, even a small one, brings you closer to your goal. Keep going!']
+      },
+      parceria: {
+        pt: ['🤝 Que incrível! Parcerias são sempre bem-vindas. Envie sua proposta pelo formulário de contato abaixo — vai ser um prazer conversar!'],
+        en: ['🤝 How exciting! Partnerships are always welcome. Send your proposal via the contact form below — would love to chat!']
+      },
+      frase: {
+        pt: ['🌟 Aqui vai uma pra você:\n\n"Você não precisa ser perfeito, só precisa continuar."',
+             '✨ Pense nisso:\n\n"Cada amanhecer é uma nova chance de recomeçar."'],
+        en: ['🌟 Here\'s one for you:\n\n"You don\'t need to be perfect, you just need to keep going."',
+             '✨ Think about this:\n\n"Every sunrise is a new chance to start again."']
+      },
+      foco: {
+        pt: ['🎯 O Modo Foco exibe a frase em tela cheia com fundo escuro e cronômetro — ideal para meditação! Clique no botão "🎯 Foco" no menu para ativar.'],
+        en: ['🎯 Focus Mode displays the quote fullscreen with dark background and timer — perfect for meditation! Click the "🎯 Focus" button in the menu to activate.']
+      },
+      ajuda: {
+        pt: ['💬 Posso te ajudar com motivação, sugestões de frases, dúvidas sobre o site ou simplesmente conversar 😊 O que você precisa?'],
+        en: ['💬 I can help with motivation, quote suggestions, site questions, or just chat 😊 What do you need?']
+      },
+      obrigado: {
+        pt: ['🌱 Fico feliz em poder ajudar! Qualquer coisa, é só me chamar.'],
+        en: ['🌱 Happy to help! Anytime you need, just reach out.']
+      },
+      default: {
+        pt: ['🌿 Interessante… me conta mais sobre isso.',
+             '💭 Estou aqui para te ouvir. Como posso ajudar?',
+             '✨ Isso é importante. Como você se sente em relação a isso?'],
+        en: ['🌿 Interesting… tell me more about that.',
+             '💭 I\'m here to listen. How can I help?',
+             '✨ That matters. How do you feel about it?']
+      }
+    };
+
+    const pick = (key) => {
+      const arr = r[key][lang] || r[key]['pt'];
+      return arr[Math.floor(Math.random() * arr.length)];
+    };
+
+    // Detectar intenção
+    if (msg.match(/\b(oi|olá|ola|hey|hello|hi|bom dia|boa tarde|boa noite)\b/))
+      return pick('saudacao');
+
+    if (msg.match(/\b(triste|desanimado|cansado|ansioso|deprimido|mal|ruim|difícil|dificil|sozinho)\b/))
+      return pick('tristeza');
+
+    if (msg.match(/\b(motivação|motivar|motivacao|força|forca|animo|ânimo|inspiração|inspiracao|incentivar)\b/))
+      return pick('motivacao');
+
+    if (msg.includes('parceria') || msg.includes('partnership') || msg.includes('colaboração') || msg.includes('negócio'))
+      return pick('parceria');
+
+    if (msg.match(/\b(frase|quote|citação|citacao|provérbio|proverbio)\b/))
+      return pick('frase');
+
+    if (msg.match(/\b(foco|focus|meditação|meditacao|meditar|concentrar)\b/))
+      return pick('foco');
+
+    if (msg.match(/\b(ajuda|help|dúvida|duvida|como|funciona|usar|o que é|oque)\b/))
+      return pick('ajuda');
+
+    if (msg.match(/\b(obrigado|obrigada|thanks|thank you|valeu|grato|grata)\b/))
+      return pick('obrigado');
+
+    // Respostas contextuais (memória)
+    if (context.includes('triste') || context.includes('desanimad'))
+      return lang === 'pt'
+        ? '🌿 Ainda estou aqui com você. Quer falar mais sobre o que está sentindo?'
+        : '🌿 I\'m still here with you. Want to talk more about what you\'re feeling?';
+
+    if (context.includes('motiv') || context.includes('força') || context.includes('force'))
+      return lang === 'pt'
+        ? '💪 Vamos continuar firmes! Qual é seu próximo passo hoje?'
+        : '💪 Let\'s keep going strong! What\'s your next step today?';
+
+    if (context.includes('parceria') || context.includes('partner'))
+      return lang === 'pt'
+        ? '🤝 Posso te ajudar com mais alguma informação sobre a parceria?'
+        : '🤝 Can I help you with more information about the partnership?';
+
+    return pick('default');
+  }
+
+  // ── Hora formatada para timestamp ──
   function chatNow() {
     return new Date().toLocaleTimeString(getLang()==='pt'?'pt-BR':'en-US',{hour:'2-digit',minute:'2-digit'});
   }
 
-  // Renderiza uma mensagem na área de chat
-  // role: 'bot' | 'user'
-  // text: string com o conteúdo
+  // ── Renderizar mensagem (com sanitização) ──
   function appendMessage(role, text) {
-    const div       = document.createElement('div');
-    div.className   = `chat-msg ${role}`;
-    const avatar    = role==='bot' ? '🌿' : '👤';
-    const timeStr   = chatNow();
-
+    const div     = document.createElement('div');
+    div.className = `chat-msg ${role}`;
+    const avatar  = role==='bot' ? '🌿' : '👤';
+    const timeStr = chatNow();
+    // Sanitiza o texto e converte \n em <br>
+    const safeText = sanitize(text).replace(/\n/g,'<br>');
     div.innerHTML = `
       <div class="chat-msg-avatar">${avatar}</div>
       <div class="chat-bubble">
-        ${text.replace(/\n/g,'<br>')}
+        ${safeText}
         <span class="chat-bubble-time">${timeStr}</span>
       </div>`;
-
     chatMessages.appendChild(div);
-    // Rola automaticamente para a última mensagem
     chatMessages.scrollTop = chatMessages.scrollHeight;
     return div;
   }
 
-  // Mostra/esconde indicador de digitação
   function setTyping(show) {
     chatTyping.classList.toggle('show', show);
     if (show) chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  // Mensagem de boas-vindas inicial (injetada uma única vez ao abrir pela 1ª vez)
   function injectWelcomeMessage() {
     const lang = getLang();
     const text = lang === 'pt'
@@ -1730,25 +1791,23 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
     appendMessage('bot', text);
   }
 
-  // Atualiza textos do chat ao trocar idioma
   function updateChatLang() {
     chatInput.placeholder = getLang()==='pt' ? 'Digite sua mensagem...' : 'Type your message...';
+    if (chatModeBadge) {
+      chatModeBadge.textContent = '🧠 IA Local';
+    }
   }
 
-  // Abre a janela do chat
   function openChat() {
     if (chatOpen) return;
     chatOpen = true;
     chatWindow.classList.add('open');
     chatFab.setAttribute('aria-label', getLang()==='pt'?'Fechar assistente':'Close assistant');
-    // Remove o badge de notificação
     chatBadge.classList.add('hidden');
-    // Injeta boas-vindas somente na primeira abertura
     if (chatMessages.children.length === 0) injectWelcomeMessage();
     chatInput.focus();
   }
 
-  // Fecha a janela do chat
   function closeChat() {
     if (!chatOpen) return;
     chatOpen = false;
@@ -1757,16 +1816,13 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
     chatFab.focus();
   }
 
-  // Toggle: clicou no FAB
   chatFab.addEventListener('click', () => chatOpen ? closeChat() : openChat());
   chatClose.addEventListener('click', closeChat);
 
-  // Fecha com Escape
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && chatOpen && !focusOpen) closeChat();
   });
 
-  // Chips de atalho rápido
   chatChips.forEach(chip => {
     chip.addEventListener('click', () => {
       const lang = getLang();
@@ -1777,13 +1833,11 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
     });
   });
 
-  // Auto-resize do textarea do chat
   chatInput.addEventListener('input', () => {
     chatInput.style.height = 'auto';
     chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
   });
 
-  // Envia com Enter (Shift+Enter = quebra de linha)
   chatInput.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -1793,16 +1847,17 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
 
   chatSend.addEventListener('click', sendChatMessage);
 
-  // Função principal de envio de mensagem ao chatbot
+  // ── Envio de mensagem: tenta API → fallback local ──
   async function sendChatMessage() {
     const text = chatInput.value.trim();
     if (!text || chatBusy) return;
 
-    // Exibe a mensagem do usuário
     appendMessage('user', text);
     chatHistory.push({ role: 'user', content: text });
 
-    // Limpa o input e redimensiona
+    // Limita histórico (performance + custo de API)
+    if (chatHistory.length > 20) chatHistory.shift();
+
     chatInput.value = '';
     chatInput.style.height = 'auto';
 
@@ -1810,51 +1865,64 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
     chatSend.disabled = true;
     setTyping(true);
 
+    // Tenta primeiro via proxy backend (/api/chat)
+    // Se não houver backend, cai no fallback local automaticamente
+    let replied = false;
+
     try {
-      // Chama a API Anthropic via proxy backend seguro
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch('/api/chat', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model:      'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system:     getLang()==='pt' ? CHAT_SYSTEM_PT : CHAT_SYSTEM_EN,
-          messages:   chatHistory   // envia todo o histórico para manter contexto
+          message: text,
+          history: chatHistory,
+          lang:    getLang()
         }),
-        signal: AbortSignal.timeout(20000)
+        signal: AbortSignal.timeout(8000)   // 8s — se não responder, usa local
       });
 
       if (!res.ok) throw new Error('API error ' + res.status);
 
-      const data    = await res.json();
-      // Extrai o texto da resposta do modelo
-      const reply   = data.content?.map(b => b.text || '').join('') || '...';
+      const data  = await res.json();
+      const reply = data.reply || data.content?.map(b=>b.text||'').join('') || '';
 
-      // Adiciona resposta ao histórico para manter contexto na próxima mensagem
+      if (reply) {
+        chatHistory.push({ role: 'assistant', content: reply });
+        setTyping(false);
+        appendMessage('bot', reply);
+        // Atualiza badge para indicar IA real
+        if (chatModeBadge) {
+          chatModeBadge.textContent = '🤖 IA Real';
+          chatModeBadge.classList.remove('local');
+        }
+        replied = true;
+      }
+    } catch {
+      // Backend indisponível — usa IA local silenciosamente
+    }
+
+    // Fallback: IA local inteligente (sempre funciona)
+    if (!replied) {
+      // Simula tempo de digitação realista
+      await new Promise(r => setTimeout(r, 600 + Math.random() * 400));
+      const reply = getSmartResponse(text);
       chatHistory.push({ role: 'assistant', content: reply });
-
       setTyping(false);
       appendMessage('bot', reply);
-
-    } catch (err) {
-      setTyping(false);
-      const lang = getLang();
-      // Mensagem de fallback amigável em caso de erro
-      const fallback = lang==='pt'
-        ? '🌱 Desculpe, estou com dificuldades técnicas no momento. Por favor, envie sua mensagem pelo formulário de contato abaixo ou diretamente para rafaelpereiraalmeida25@gmail.com'
-        : '🌱 Sorry, I\'m experiencing technical difficulties right now. Please send your message via the contact form below or directly to rafaelpereiraalmeida25@gmail.com';
-      appendMessage('bot', fallback);
-    } finally {
-      chatBusy      = false;
-      chatSend.disabled = false;
-      chatInput.focus();
+      if (chatModeBadge) {
+        chatModeBadge.textContent = '🧠 IA Local';
+        chatModeBadge.classList.add('local');
+      }
     }
+
+    chatBusy      = false;
+    chatSend.disabled = false;
+    chatInput.focus();
   }
 
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   // BLOCO 19 — INICIALIZAÇÃO GERAL
-  // Ordem: pool → data → streak → labels → render → show
-  // ══════════════════════════════════════════════════════════════
+  // ══════════════════════════════════════════════════════════
   rebuildPool();
   updateDate();
   buildStreak();
@@ -1869,7 +1937,6 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
   if (lsGet('notifEnabled')==='true') { notifToggle.checked=true; setNotifStatus(true); }
   else { setNotifStatus(false); }
 
-  // Exibe a primeira frase (quotes[0]) ao carregar a página
   showQuote(quotes[0]);
   </script>
 </body>
