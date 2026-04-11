@@ -10,10 +10,26 @@
   <meta property="og:description" content="Transforme sua mentalidade com reflexões diárias." />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#2e7d32" />
+
+  <!-- 🔴 SEGURANÇA: CSP para bloquear scripts não autorizados -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self';
+      script-src 'self' 'unsafe-inline';
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src https://fonts.gstatic.com;
+      connect-src 'self' https://api.anthropic.com https://wa.me https://x.com;
+      img-src 'self' data:;" />
+
+  <!-- PWA Manifest inline -->
+  <link rel="manifest" href="data:application/json,{%22name%22:%22Di%C3%A1rio%20de%20Motiva%C3%A7%C3%A3o%22,%22short_name%22:%22Diario%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22theme_color%22:%22%232e7d32%22,%22background_color%22:%22%23faf8f3%22}" />
+
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>" />
+  <!-- 🟢 PERFORMANCE: preload + display=swap -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" /></noscript>
+
   <style>
     :root {
       --green-deep: #1a4a1e;
@@ -81,6 +97,22 @@
       --shadow-lg:0 16px 60px rgba(0,0,0,0.5);
     }
 
+    /* 🔵 ACESSIBILIDADE: reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+      .focus-particle { display: none !important; }
+    }
+
+    /* 🔵 ACESSIBILIDADE: foco visível */
+    :focus-visible {
+      outline: 2px solid var(--green-mid);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{
@@ -94,6 +126,26 @@
       background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
       pointer-events:none;z-index:0;opacity:0.5;
     }
+
+    /* 🔵 ACESSIBILIDADE: skip link */
+    .skip-link {
+      position: absolute; top: -100%; left: 12px;
+      padding: 10px 20px; background: var(--green-mid); color: #fff;
+      border-radius: 0 0 8px 8px; font-weight: 600; font-size: .9rem;
+      text-decoration: none; z-index: 9999;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* Atalhos de teclado — tooltip */
+    .kbd-hint {
+      position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+      background: var(--text); color: var(--cream); border-radius: 50px;
+      padding: 6px 16px; font-size: .78rem; font-weight: 600;
+      opacity: 0; pointer-events: none; z-index: 300;
+      transition: opacity .4s;
+    }
+    .kbd-hint.show { opacity: 1; }
 
     header{
       background:var(--grad);color:#fff;
@@ -149,6 +201,19 @@
     .btn-glass.active-lang{background:#fff;color:var(--green-mid)}
     @keyframes fadeDown{from{opacity:0;transform:translateY(-22px)}to{opacity:1;transform:translateY(0)}}
     @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Painel de atalhos de teclado */
+    .kbd-panel {
+      display:none;position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
+      background:var(--card-bg);border:1px solid var(--border);
+      border-radius:16px;padding:16px 20px;box-shadow:var(--shadow-lg);
+      z-index:290;min-width:260px;
+    }
+    .kbd-panel.show{display:block;animation:fadeUp .25s ease}
+    .kbd-panel h4{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:10px}
+    .kbd-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:.82rem;color:var(--text-mid);border-bottom:1px solid var(--border)}
+    .kbd-row:last-child{border-bottom:none}
+    .kbd-key{background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-family:monospace;font-size:.78rem;font-weight:700;color:var(--green-mid)}
 
     nav.main-nav{
       background:var(--nav-bg);backdrop-filter:blur(14px);
@@ -209,6 +274,10 @@
     .share-group{display:flex;gap:8px;flex-wrap:wrap}
     .contador{color:var(--text-soft);font-size:.85rem;font-weight:500}
     .contador strong{color:var(--green-mid)}
+
+    /* Limite de msgs do chat */
+    .chat-limit-warning{background:rgba(198,40,40,.08);border:1px solid rgba(198,40,40,.2);color:var(--error);font-size:.82rem;padding:8px 12px;border-radius:10px;margin-top:8px;display:none}
+    .chat-limit-warning.show{display:block}
 
     .ai-loading{display:none;align-items:center;gap:10px;color:var(--text-soft);font-size:.88rem;font-weight:500;margin-top:12px}
     .ai-loading.show{display:flex}
@@ -296,6 +365,11 @@
     .notif-status{font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:50px;margin-top:6px;display:inline-block}
     .notif-status.on{background:rgba(76,175,80,.15);color:var(--green-mid)}
     .notif-status.off{background:var(--cream2);color:var(--text-soft)}
+
+    /* Horário de notificação configurável */
+    .notif-time-input{padding:4px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:.85rem;font-family:inherit;background:var(--card-bg);color:var(--text);margin-left:10px;cursor:pointer}
+    .notif-time-input:focus{outline:none;border-color:var(--green-soft)}
+
     .diary-section{margin-top:28px}
     .diary-entry-wrap{position:relative}
     .diary-textarea{width:100%;min-height:120px;padding:14px 16px;border:1.5px solid var(--border);border-radius:14px;font-size:.95rem;font-family:'DM Sans',sans-serif;background:var(--card-bg);color:var(--text);transition:var(--transition);resize:vertical;line-height:1.65}
@@ -401,301 +475,86 @@
       .focus-timer{font-size:2.2rem}
     }
 
-    /* ══════════════════════════════════════════
-       CHATBOT WIDGET
-    ══════════════════════════════════════════ */
-    .chat-fab {
-      position: fixed;
-      bottom: 90px;
-      right: 28px;
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      background: var(--grad);
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      box-shadow: 0 6px 24px rgba(46,125,50,.45);
-      z-index: 200;
-      transition: var(--transition);
-      animation: fabPulse 3s ease-in-out infinite;
-    }
-    .chat-fab:hover { transform: scale(1.1) translateY(-3px); box-shadow: 0 12px 32px rgba(46,125,50,.55); }
-    .chat-fab .chat-fab-badge {
-      position: absolute;
-      top: -4px; right: -4px;
-      width: 18px; height: 18px;
-      background: #ef4444;
-      border-radius: 50%;
-      border: 2px solid var(--cream);
-      font-size: .6rem;
-      font-weight: 700;
-      color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      animation: badgePop .4s cubic-bezier(.34,1.56,.64,1);
-    }
-    .chat-fab .chat-fab-badge.hidden { display: none; }
-    @keyframes fabPulse {
-      0%,100% { box-shadow: 0 6px 24px rgba(46,125,50,.45); }
-      50%      { box-shadow: 0 6px 32px rgba(46,125,50,.7), 0 0 0 8px rgba(46,125,50,.1); }
-    }
-    @keyframes badgePop {
-      from { transform: scale(0); }
-      to   { transform: scale(1); }
-    }
-    .chat-window {
-      position: fixed;
-      bottom: 160px;
-      right: 28px;
-      width: 370px;
-      max-height: 560px;
-      border-radius: 24px;
-      background: var(--card-bg);
-      box-shadow: 0 20px 60px rgba(0,0,0,.18), 0 0 0 1px var(--border);
-      display: flex;
-      flex-direction: column;
-      z-index: 201;
-      overflow: hidden;
-      transform-origin: bottom right;
-      transform: scale(0) translateY(20px);
-      opacity: 0;
-      pointer-events: none;
-      transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
-    }
-    .chat-window.open {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-      pointer-events: all;
-    }
-    @media(max-width:420px) {
-      .chat-window { width: calc(100vw - 24px); right: 12px; bottom: 150px; max-height: 480px; }
-      .chat-fab { right: 16px; bottom: 80px; }
-    }
-    .chat-header {
-      background: var(--grad);
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-    .chat-avatar {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-      border: 2px solid rgba(255,255,255,.4);
-    }
-    .chat-header-info { flex: 1; }
-    .chat-header-name {
-      font-weight: 700;
-      font-size: .95rem;
-      color: #fff;
-      line-height: 1.2;
-    }
-    .chat-header-status {
-      font-size: .72rem;
-      color: rgba(255,255,255,.75);
-      display: flex; align-items: center; gap: 5px;
-      margin-top: 2px;
-    }
-    .chat-status-dot {
-      width: 7px; height: 7px;
-      background: #4ade80;
-      border-radius: 50%;
-      animation: statusPulse 2s ease-in-out infinite;
-    }
-    @keyframes statusPulse {
-      0%,100% { opacity:1; }
-      50%      { opacity:.4; }
-    }
-    .chat-close-btn {
-      background: rgba(255,255,255,.18);
-      border: none; border-radius: 50%;
-      width: 32px; height: 32px;
-      color: #fff; cursor: pointer;
-      font-size: .85rem;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .2s;
-    }
-    .chat-close-btn:hover { background: rgba(255,255,255,.35); }
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      scroll-behavior: smooth;
-    }
-    .chat-messages::-webkit-scrollbar { width: 4px; }
-    .chat-messages::-webkit-scrollbar-track { background: transparent; }
-    .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-    .chat-msg {
-      display: flex;
-      gap: 9px;
-      animation: msgIn .3s cubic-bezier(.34,1.56,.64,1);
-    }
-    @keyframes msgIn {
-      from { opacity:0; transform:translateY(12px) scale(.95); }
-      to   { opacity:1; transform:translateY(0) scale(1); }
-    }
-    .chat-msg.user { flex-direction: row-reverse; }
-    .chat-msg-avatar {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      background: var(--grad-soft);
-      display: flex; align-items: center; justify-content: center;
-      font-size: .85rem;
-      flex-shrink: 0;
-      align-self: flex-end;
-    }
-    .chat-msg.user .chat-msg-avatar { background: var(--grad); }
-    .chat-bubble {
-      max-width: 78%;
-      padding: 11px 15px;
-      border-radius: 18px;
-      font-size: .88rem;
-      line-height: 1.55;
-      position: relative;
-    }
-    .chat-msg.bot .chat-bubble {
-      background: var(--cream2);
-      color: var(--text);
-      border-bottom-left-radius: 4px;
-      border: 1px solid var(--border);
-    }
-    body.dark .chat-msg.bot .chat-bubble { background: var(--sand); }
-    .chat-msg.user .chat-bubble {
-      background: var(--grad);
-      color: #fff;
-      border-bottom-right-radius: 4px;
-    }
-    .chat-bubble-time {
-      font-size: .63rem;
-      margin-top: 4px;
-      opacity: .55;
-      display: block;
-    }
-    .chat-msg.user .chat-bubble-time { text-align: right; }
-    .chat-suggestions {
-      display: flex;
-      gap: 7px;
-      flex-wrap: wrap;
-      padding: 8px 16px 0;
-    }
-    .chat-chip {
-      padding: 6px 13px;
-      border-radius: 50px;
-      border: 1.5px solid var(--green-mid);
-      color: var(--green-mid);
-      font-size: .75rem;
-      font-weight: 600;
-      background: transparent;
-      cursor: pointer;
-      font-family: inherit;
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-    .chat-chip:hover { background: var(--green-mid); color: #fff; }
-    .chat-typing {
-      display: none;
-      align-items: center;
-      gap: 9px;
-    }
-    .chat-typing.show { display: flex; }
-    .chat-typing-dots {
-      background: var(--cream2);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      border-bottom-left-radius: 4px;
-      padding: 10px 15px;
-      display: flex; gap: 4px; align-items: center;
-    }
-    body.dark .chat-typing-dots { background: var(--sand); }
-    .chat-typing-dot {
-      width: 7px; height: 7px;
-      background: var(--text-soft);
-      border-radius: 50%;
-      animation: typingBounce 1.2s infinite;
-    }
-    .chat-typing-dot:nth-child(2) { animation-delay: .2s; }
-    .chat-typing-dot:nth-child(3) { animation-delay: .4s; }
-    @keyframes typingBounce {
-      0%,60%,100% { transform: translateY(0); }
-      30%          { transform: translateY(-6px); }
-    }
-    .chat-input-area {
-      padding: 14px 16px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 10px;
-      align-items: flex-end;
-      flex-shrink: 0;
-      background: var(--card-bg);
-    }
-    .chat-input {
-      flex: 1;
-      border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 10px 14px;
-      font-size: .9rem;
-      font-family: inherit;
-      background: var(--cream2);
-      color: var(--text);
-      resize: none;
-      max-height: 120px;
-      min-height: 42px;
-      line-height: 1.4;
-      transition: var(--transition);
-      overflow-y: auto;
-    }
-    body.dark .chat-input { background: var(--sand); }
-    .chat-input:focus { outline: none; border-color: var(--green-soft); box-shadow: 0 0 0 3px rgba(76,175,80,.12); }
-    .chat-send-btn {
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      background: var(--grad);
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
-      transition: var(--transition);
-      flex-shrink: 0;
-      box-shadow: 0 3px 12px rgba(46,125,50,.35);
-    }
-    .chat-send-btn:hover { transform: scale(1.1); box-shadow: 0 6px 18px rgba(46,125,50,.45); }
-    .chat-send-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    /* ── CHATBOT ── */
+    .chat-fab{position:fixed;bottom:90px;right:28px;width:58px;height:58px;border-radius:50%;background:var(--grad);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 6px 24px rgba(46,125,50,.45);z-index:200;transition:var(--transition);animation:fabPulse 3s ease-in-out infinite}
+    .chat-fab:hover{transform:scale(1.1) translateY(-3px);box-shadow:0 12px 32px rgba(46,125,50,.55)}
+    .chat-fab .chat-fab-badge{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:#ef4444;border-radius:50%;border:2px solid var(--cream);font-size:.6rem;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;animation:badgePop .4s cubic-bezier(.34,1.56,.64,1)}
+    .chat-fab .chat-fab-badge.hidden{display:none}
+    @keyframes fabPulse{0%,100%{box-shadow:0 6px 24px rgba(46,125,50,.45)}50%{box-shadow:0 6px 32px rgba(46,125,50,.7),0 0 0 8px rgba(46,125,50,.1)}}
+    @keyframes badgePop{from{transform:scale(0)}to{transform:scale(1)}}
+    .chat-window{position:fixed;bottom:160px;right:28px;width:370px;max-height:560px;border-radius:24px;background:var(--card-bg);box-shadow:0 20px 60px rgba(0,0,0,.18),0 0 0 1px var(--border);display:flex;flex-direction:column;z-index:201;overflow:hidden;transform-origin:bottom right;transform:scale(0) translateY(20px);opacity:0;pointer-events:none;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s ease}
+    .chat-window.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+    @media(max-width:420px){.chat-window{width:calc(100vw - 24px);right:12px;bottom:150px;max-height:480px}.chat-fab{right:16px;bottom:80px}}
+    .chat-header{background:var(--grad);padding:18px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+    .chat-avatar{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;border:2px solid rgba(255,255,255,.4)}
+    .chat-header-info{flex:1}
+    .chat-header-name{font-weight:700;font-size:.95rem;color:#fff;line-height:1.2}
+    .chat-header-status{font-size:.72rem;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:5px;margin-top:2px}
+    .chat-status-dot{width:7px;height:7px;background:#4ade80;border-radius:50%;animation:statusPulse 2s ease-in-out infinite}
+    @keyframes statusPulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .chat-close-btn{background:rgba(255,255,255,.18);border:none;border-radius:50%;width:32px;height:32px;color:#fff;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:background .2s}
+    .chat-close-btn:hover{background:rgba(255,255,255,.35)}
+    .chat-messages{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+    .chat-messages::-webkit-scrollbar{width:4px}
+    .chat-messages::-webkit-scrollbar-track{background:transparent}
+    .chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+    .chat-msg{display:flex;gap:9px;animation:msgIn .3s cubic-bezier(.34,1.56,.64,1)}
+    @keyframes msgIn{from{opacity:0;transform:translateY(12px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .chat-msg.user{flex-direction:row-reverse}
+    .chat-msg-avatar{width:32px;height:32px;border-radius:50%;background:var(--grad-soft);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;align-self:flex-end}
+    .chat-msg.user .chat-msg-avatar{background:var(--grad)}
+    .chat-bubble{max-width:78%;padding:11px 15px;border-radius:18px;font-size:.88rem;line-height:1.55;position:relative}
+    .chat-msg.bot .chat-bubble{background:var(--cream2);color:var(--text);border-bottom-left-radius:4px;border:1px solid var(--border)}
+    body.dark .chat-msg.bot .chat-bubble{background:var(--sand)}
+    .chat-msg.user .chat-bubble{background:var(--grad);color:#fff;border-bottom-right-radius:4px}
+    .chat-bubble-time{font-size:.63rem;margin-top:4px;opacity:.55;display:block}
+    .chat-msg.user .chat-bubble-time{text-align:right}
+    .chat-suggestions{display:flex;gap:7px;flex-wrap:wrap;padding:8px 16px 0}
+    .chat-chip{padding:6px 13px;border-radius:50px;border:1.5px solid var(--green-mid);color:var(--green-mid);font-size:.75rem;font-weight:600;background:transparent;cursor:pointer;font-family:inherit;transition:var(--transition);white-space:nowrap}
+    .chat-chip:hover{background:var(--green-mid);color:#fff}
+    .chat-typing{display:none;align-items:center;gap:9px}
+    .chat-typing.show{display:flex}
+    .chat-typing-dots{background:var(--cream2);border:1px solid var(--border);border-radius:18px;border-bottom-left-radius:4px;padding:10px 15px;display:flex;gap:4px;align-items:center}
+    body.dark .chat-typing-dots{background:var(--sand)}
+    .chat-typing-dot{width:7px;height:7px;background:var(--text-soft);border-radius:50%;animation:typingBounce 1.2s infinite}
+    .chat-typing-dot:nth-child(2){animation-delay:.2s}
+    .chat-typing-dot:nth-child(3){animation-delay:.4s}
+    @keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+    .chat-input-area{padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end;flex-shrink:0;background:var(--card-bg)}
+    .chat-input{flex:1;border:1.5px solid var(--border);border-radius:14px;padding:10px 14px;font-size:.9rem;font-family:inherit;background:var(--cream2);color:var(--text);resize:none;max-height:120px;min-height:42px;line-height:1.4;transition:var(--transition);overflow-y:auto}
+    body.dark .chat-input{background:var(--sand)}
+    .chat-input:focus{outline:none;border-color:var(--green-soft);box-shadow:0 0 0 3px rgba(76,175,80,.12)}
+    .chat-send-btn{width:42px;height:42px;border-radius:50%;background:var(--grad);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:var(--transition);flex-shrink:0;box-shadow:0 3px 12px rgba(46,125,50,.35)}
+    .chat-send-btn:hover{transform:scale(1.1);box-shadow:0 6px 18px rgba(46,125,50,.45)}
+    .chat-send-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .chat-ai-mode-badge{display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.8);background:rgba(255,255,255,.15);padding:2px 8px;border-radius:50px;border:1px solid rgba(255,255,255,.25);margin-top:4px;cursor:pointer;transition:background .2s}
+    .chat-ai-mode-badge:hover{background:rgba(255,255,255,.25)}
+    .chat-ai-mode-badge.local{opacity:.7}
 
-    /* Badge de modo IA no chat */
-    .chat-ai-mode-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: .68rem;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.8);
-      background: rgba(255,255,255,.15);
-      padding: 2px 8px;
-      border-radius: 50px;
-      border: 1px solid rgba(255,255,255,.25);
-      margin-top: 4px;
-      cursor: pointer;
-      transition: background .2s;
-    }
-    .chat-ai-mode-badge:hover { background: rgba(255,255,255,.25); }
-    .chat-ai-mode-badge.local { opacity: .7; }
+    /* 🔴 Indicador de limite de mensagens */
+    .chat-counter-bar{height:3px;background:var(--border);margin:0;border-radius:0}
+    .chat-counter-fill{height:100%;background:var(--grad-soft);border-radius:0;transition:width .3s,background .3s}
+    .chat-counter-fill.warn{background:linear-gradient(90deg,#f59e0b,#ef4444)}
   </style>
 </head>
 <body>
+
+<!-- 🔵 ACESSIBILIDADE: Skip link -->
+<a href="#inicio" class="skip-link">Ir para o conteúdo principal</a>
+
+<!-- 🔵 ACESSIBILIDADE: Tooltip de atalhos -->
+<div class="kbd-hint" id="kbd-hint" role="status" aria-live="polite"></div>
+
+<!-- Painel de atalhos -->
+<div class="kbd-panel" id="kbd-panel" role="dialog" aria-label="Atalhos de teclado">
+  <h4>⌨️ Atalhos de teclado</h4>
+  <div class="kbd-row"><span>Nova frase</span><span class="kbd-key">N</span></div>
+  <div class="kbd-row"><span>Favoritar/desfavoritar</span><span class="kbd-key">F</span></div>
+  <div class="kbd-row"><span>Copiar frase</span><span class="kbd-key">C</span></div>
+  <div class="kbd-row"><span>Modo Foco</span><span class="kbd-key">M</span></div>
+  <div class="kbd-row"><span>Abrir/fechar chat</span><span class="kbd-key">H</span></div>
+  <div class="kbd-row"><span>Fechar painéis</span><span class="kbd-key">Esc</span></div>
+</div>
 
   <!-- MODO FOCO -->
   <div class="focus-overlay" id="focus-overlay" role="dialog" aria-modal="true" aria-label="Modo Foco">
@@ -712,8 +571,8 @@
     </div>
   </div>
 
-  <!-- CHATBOT WIDGET -->
-  <button class="chat-fab" id="chat-fab" aria-label="Abrir assistente virtual" title="Fale com o assistente">
+  <!-- CHATBOT -->
+  <button class="chat-fab" id="chat-fab" aria-label="Abrir assistente virtual" title="Fale com o assistente (H)">
     🌿
     <span class="chat-fab-badge" id="chat-badge">1</span>
   </button>
@@ -728,10 +587,14 @@
           <span class="chat-status-dot"></span>
           <span data-lang="pt">Online agora</span><span data-lang="en">Online now</span>
         </div>
-        <!-- Badge mostrando modo atual: IA real ou local -->
-        <div class="chat-ai-mode-badge local" id="chat-mode-badge" title="Clique para saber mais">🧠 IA Local</div>
+        <div class="chat-ai-mode-badge local" id="chat-mode-badge">🧠 IA Local</div>
       </div>
       <button class="chat-close-btn" id="chat-close" aria-label="Fechar chat">✕</button>
+    </div>
+
+    <!-- 🔴 SEGURANÇA: barra de limite de mensagens -->
+    <div class="chat-counter-bar" aria-hidden="true">
+      <div class="chat-counter-fill" id="chat-counter-fill" style="width:100%"></div>
     </div>
 
     <div class="chat-messages" id="chat-messages"></div>
@@ -776,7 +639,8 @@
         <button id="toggle-theme" class="btn-glass" aria-label="Alternar tema">🌙</button>
         <button id="lang-pt" class="btn-glass active-lang" onclick="setLang('pt')">🇧🇷 PT</button>
         <button id="lang-en" class="btn-glass" onclick="setLang('en')">🇺🇸 EN</button>
-        <button id="focus-btn" class="btn-glass">🎯 <span data-lang="pt">Foco</span><span data-lang="en">Focus</span></button>
+        <button id="focus-btn" class="btn-glass" title="Atalho: M">🎯 <span data-lang="pt">Foco</span><span data-lang="en">Focus</span></button>
+        <button id="kbd-btn" class="btn-glass" title="Atalhos de teclado" aria-label="Atalhos de teclado">⌨️</button>
       </div>
     </div>
   </header>
@@ -797,7 +661,7 @@
     </ul>
   </nav>
 
-  <main class="container">
+  <main class="container" id="main-content">
 
     <section id="inicio">
       <article class="card">
@@ -838,8 +702,8 @@
         <div class="ai-loading" id="ai-loading"><div class="ai-dots"><span></span><span></span><span></span></div><span data-lang="pt">IA gerando frase...</span><span data-lang="en">AI generating quote...</span></div>
         <div class="ai-badge" id="ai-badge">🤖 <span data-lang="pt">Gerado por IA</span><span data-lang="en">AI Generated</span></div>
         <div class="btn-row">
-          <button id="nova-frase" class="btn-primary">✨ <span data-lang="pt">Nova Inspiração</span><span data-lang="en">New Inspiration</span></button>
-          <button id="copy-btn" class="btn-outline">📋 <span data-lang="pt">Copiar</span><span data-lang="en">Copy</span></button>
+          <button id="nova-frase" class="btn-primary" title="Atalho: N">✨ <span data-lang="pt">Nova Inspiração</span><span data-lang="en">New Inspiration</span></button>
+          <button id="copy-btn" class="btn-outline" title="Atalho: C">📋 <span data-lang="pt">Copiar</span><span data-lang="en">Copy</span></button>
           <div class="share-group">
             <button class="btn-share whatsapp" id="share-whatsapp">💬 WhatsApp</button>
             <button class="btn-share twitter" id="share-twitter">🐦 X / Twitter</button>
@@ -868,6 +732,10 @@
             <h3>⭐ <span id="fav-count-label">0 favoritos</span></h3>
             <div class="fav-actions">
               <button id="export-favs" class="btn-outline" style="padding:7px 14px;font-size:.82rem"><span data-lang="pt">📥 Exportar</span><span data-lang="en">📥 Export</span></button>
+              <!-- 🟡 CÓDIGO: Backup completo -->
+              <button id="backup-btn" class="btn-outline" style="padding:7px 14px;font-size:.82rem" title="Exportar tudo: favoritos + diário + progresso">
+                <span data-lang="pt">💾 Backup</span><span data-lang="en">💾 Backup</span>
+              </button>
               <button id="clear-favs" class="btn-outline" style="padding:7px 14px;font-size:.82rem"><span data-lang="pt">🗑️ Limpar todos</span><span data-lang="en">🗑️ Clear all</span></button>
             </div>
           </div>
@@ -921,8 +789,10 @@
         <div class="notif-row">
           <div class="notif-info">
             <strong data-lang="pt">🔔 Lembrete diário</strong><strong data-lang="en">🔔 Daily reminder</strong>
-            <small data-lang="pt">Receba um aviso para buscar sua inspiração do dia.</small>
+            <!-- 🔵 UX: horário configurável -->
+            <small data-lang="pt">Receba um aviso para buscar sua inspiração.</small>
             <small data-lang="en">Get a reminder to seek your daily inspiration.</small>
+            <input type="time" id="notif-time" class="notif-time-input" value="09:00" aria-label="Horário do lembrete" />
             <div class="notif-status off" id="notif-status"></div>
           </div>
           <label class="toggle-switch" aria-label="Ativar notificações"><input type="checkbox" id="notif-toggle"/><span class="toggle-slider"></span></label>
@@ -959,7 +829,7 @@
         <p class="lead" data-lang="pt">Cadastre-se e receba semanalmente nossas melhores reflexões.</p>
         <p class="lead" data-lang="en">Sign up and receive our best weekly reflections.</p>
         <form class="newsletter-form" id="newsletter-form" novalidate>
-          <input type="email" id="newsletter-email" data-placeholder-pt="Seu melhor e-mail" data-placeholder-en="Your best email" placeholder="Seu melhor e-mail" required/>
+          <input type="email" id="newsletter-email" data-placeholder-pt="Seu melhor e-mail" data-placeholder-en="Your best email" placeholder="Seu melhor e-mail" required autocomplete="email"/>
           <button type="submit" class="btn-primary" id="newsletter-submit">🌱 <span data-lang="pt">Inscrever-se</span><span data-lang="en">Subscribe</span></button>
         </form>
         <div class="message" id="newsletter-message" role="alert"></div>
@@ -971,10 +841,11 @@
         <div class="card-leaf">❓</div>
         <h2><span class="icon">❓</span>FAQ</h2>
         <div class="faq-item"><div class="faq-question" tabindex="0" role="button" aria-expanded="false"><span data-lang="pt">Como funciona o Diário de Motivação?</span><span data-lang="en">How does the Motivation Journal work?</span><span class="faq-chevron" aria-hidden="true">▼</span></div><div class="faq-answer" role="region"><p data-lang="pt">Oferece frases diárias, IA para frases personalizadas, Modo Foco para meditação, gráfico de progresso semanal, diário pessoal, chatbot e notificações de lembrete.</p><p data-lang="en">Offers daily quotes, AI for personalized quotes, Focus Mode for meditation, weekly progress chart, personal diary, chatbot, and reminder notifications.</p></div></div>
-        <div class="faq-item"><div class="faq-question" tabindex="0" role="button" aria-expanded="false"><span data-lang="pt">O que é o Modo Foco?</span><span data-lang="en">What is Focus Mode?</span><span class="faq-chevron" aria-hidden="true">▼</span></div><div class="faq-answer" role="region"><p data-lang="pt">Exibe a frase em tela cheia com fundo escuro, partículas animadas e cronômetro — ideal para meditação.</p><p data-lang="en">Displays the quote fullscreen with dark background, animated particles, and a timer — ideal for meditation.</p></div></div>
+        <div class="faq-item"><div class="faq-question" tabindex="0" role="button" aria-expanded="false"><span data-lang="pt">O que é o Modo Foco?</span><span data-lang="en">What is Focus Mode?</span><span class="faq-chevron" aria-hidden="true">▼</span></div><div class="faq-answer" role="region"><p data-lang="pt">Exibe a frase em tela cheia com fundo escuro, partículas animadas e cronômetro — ideal para meditação. Atalho: tecla M.</p><p data-lang="en">Displays the quote fullscreen with dark background, animated particles, and a timer — ideal for meditation. Shortcut: M key.</p></div></div>
         <div class="faq-item"><div class="faq-question" tabindex="0" role="button" aria-expanded="false"><span data-lang="pt">Posso personalizar as cores?</span><span data-lang="en">Can I customize colors?</span><span class="faq-chevron" aria-hidden="true">▼</span></div><div class="faq-answer" role="region"><p data-lang="pt">Sim! Na seção Progresso há 4 temas: Verde Natural, Oceano, Pôr do Sol e Lavanda — todos compatíveis com o modo escuro.</p><p data-lang="en">Yes! In the Progress section there are 4 themes: Green, Ocean, Sunset, and Lavender — all compatible with dark mode.</p></div></div>
         <div class="faq-item"><div class="faq-question" tabindex="0" role="button" aria-expanded="false"><span data-lang="pt">O serviço é gratuito?</span><span data-lang="en">Is the service free?</span><span class="faq-chevron" aria-hidden="true">▼</span></div><div class="faq-answer" role="region"><p data-lang="pt">Sim! 100% gratuito e sempre será.</p><p data-lang="en">Yes! 100% free and always will be.</p></div></div>
         <div class="faq-item"><div class="faq-question" tabindex="0" role="button" aria-expanded="false"><span data-lang="pt">Posso compartilhar as frases?</span><span data-lang="en">Can I share the quotes?</span><span class="faq-chevron" aria-hidden="true">▼</span></div><div class="faq-answer" role="region"><p data-lang="pt">Claro! Use os botões WhatsApp ou X/Twitter para compartilhar diretamente.</p><p data-lang="en">Absolutely! Use the WhatsApp or X/Twitter buttons to share directly.</p></div></div>
+        <div class="faq-item"><div class="faq-question" tabindex="0" role="button" aria-expanded="false"><span data-lang="pt">Quais são os atalhos de teclado?</span><span data-lang="en">What are the keyboard shortcuts?</span><span class="faq-chevron" aria-hidden="true">▼</span></div><div class="faq-answer" role="region"><p data-lang="pt">N = nova frase | F = favoritar | C = copiar | M = modo foco | H = abrir/fechar chat. Use ⌨️ no menu para ver todos.</p><p data-lang="en">N = new quote | F = favorite | C = copy | M = focus mode | H = open/close chat. Click ⌨️ in the menu to see all.</p></div></div>
       </article>
     </section>
 
@@ -1027,7 +898,7 @@
         <div class="message" id="contact-message-box" role="alert"></div>
         <div class="contact-info">
           <div class="contact-item"><span class="ci-icon">📧</span><a href="mailto:rafaelpereiraalmeida25@gmail.com" class="contact-link">rafaelpereiraalmeida25@gmail.com</a></div>
-          <div class="contact-item"><span class="ci-icon">📱</span><a href="https://www.instagram.com/diariomotivacional_official?igsh=MTBkaDlwZWxwYXJmZQ%3D%3D&utm_source=qr" class="contact-link">@diariomotivacional_official</a></div>
+          <div class="contact-item"><span class="ci-icon">📱</span><a href="https://www.instagram.com/diariomotivacional_official" class="contact-link">@diariomotivacional_official</a></div>
           <div class="contact-item"><span class="ci-icon">📍</span><span class="contact-link" data-lang="pt">Brasil</span><span class="contact-link" data-lang="en">Brazil</span></div>
         </div>
       </article>
@@ -1057,7 +928,7 @@
   'use strict';
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 1 — STORAGE SEGURO
+  // STORAGE SEGURO
   // ══════════════════════════════════════════════════════════
   const safeStorage = (() => {
     try {
@@ -1078,7 +949,7 @@
   const lsSet = (key, v) => { try { safeStorage.setItem(key, v); } catch {} };
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 2 — BANCO DE FRASES LOCAL
+  // BANCO DE FRASES
   // ══════════════════════════════════════════════════════════
   const quotes = [
     { pt:'A persistência é o caminho do êxito.',                                    en:'Persistence is the path to success.',                                          author:'Charles Chaplin',     cat:'persistencia' },
@@ -1131,7 +1002,7 @@
   }
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 3 — CONTADOR DIÁRIO
+  // CONTADOR DIÁRIO
   // ══════════════════════════════════════════════════════════
   const getTodayKey = () => new Date().toDateString();
 
@@ -1146,11 +1017,20 @@
     lsSet('counterData', JSON.stringify({ date: getTodayKey(), count: counter }));
     document.getElementById('contador-frases').textContent = counter;
     saveWeeklyData();
-    renderChart();
+    scheduleChart(); // 🟢 PERFORMANCE: debounce do gráfico
   }
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 4 — PROGRESSO SEMANAL / GRÁFICO
+  // 🟢 PERFORMANCE: renderChart com requestAnimationFrame
+  // ══════════════════════════════════════════════════════════
+  let chartRafId = null;
+  function scheduleChart() {
+    cancelAnimationFrame(chartRafId);
+    chartRafId = requestAnimationFrame(renderChart);
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // PROGRESSO SEMANAL / GRÁFICO
   // ══════════════════════════════════════════════════════════
   function getWeeklyData() { return JSON.parse(lsGet('weeklyData') || '{}'); }
 
@@ -1183,11 +1063,21 @@
       wrap.className = 'chart-bar-wrap';
       const h   = Math.max(4, Math.round((v.count/maxVal)*100));
       const day = lang==='pt' ? daysPt[v.dayIdx] : daysEn[v.dayIdx];
-      wrap.innerHTML = `
-        <div class="chart-bar${v.count===0?' chart-bar-empty':''}" style="height:${h}px" title="${v.count}">
-          ${v.count>0?`<span class="chart-bar-val">${v.count}</span>`:''}
-        </div>
-        <div class="chart-day${v.isToday?' today':''}">${day}</div>`;
+      const barDiv = document.createElement('div');
+      barDiv.className = 'chart-bar' + (v.count===0 ? ' chart-bar-empty' : '');
+      barDiv.style.height = h + 'px';
+      barDiv.title = String(v.count);
+      if (v.count > 0) {
+        const valSpan = document.createElement('span');
+        valSpan.className = 'chart-bar-val';
+        valSpan.textContent = v.count;
+        barDiv.appendChild(valSpan);
+      }
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'chart-day' + (v.isToday ? ' today' : '');
+      dayDiv.textContent = day;
+      wrap.appendChild(barDiv);
+      wrap.appendChild(dayDiv);
       container.appendChild(wrap);
     });
     const total = values.reduce((s,v)=>s+v.count,0);
@@ -1199,7 +1089,7 @@
   }
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 5 — STREAK
+  // STREAK
   // ══════════════════════════════════════════════════════════
   function buildStreak() {
     const today     = new Date().toDateString();
@@ -1220,10 +1110,11 @@
     document.getElementById('streak-count').textContent = (data.count||0)+'🔥';
     const ps = document.getElementById('ps-streak');
     if (ps) ps.textContent = (data.count||0)+'🔥';
+    return data.count || 0;
   }
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 6 — IA PARA FRASES
+  // 🟣 IA: frases com contexto do usuário injetado
   // ══════════════════════════════════════════════════════════
   const catNames = {
     all:         {pt:'motivação geral',            en:'general motivation'},
@@ -1234,11 +1125,16 @@
   };
 
   async function generateAIQuote() {
-    const lang   = getLang();
-    const cat    = catNames[currentCat]||catNames.all;
+    const lang      = getLang();
+    const cat       = catNames[currentCat] || catNames.all;
+    const streak    = JSON.parse(lsGet('streakData')||'{"count":0}').count || 0;
+    const hour      = new Date().getHours();
+    const period    = hour < 12 ? (lang==='pt'?'manhã':'morning') : hour < 18 ? (lang==='pt'?'tarde':'afternoon') : (lang==='pt'?'noite':'evening');
+
+    // 🟣 IA: contexto do usuário injetado no prompt
     const prompt = lang==='pt'
-      ? `Crie uma frase motivacional ORIGINAL sobre "${cat.pt}". Responda SOMENTE em JSON válido sem markdown: {"pt":"...","en":"...","author":"..."}`
-      : `Create an ORIGINAL motivational quote about "${cat.en}". Respond ONLY in valid JSON no markdown: {"pt":"...","en":"...","author":"..."}`;
+      ? `Crie uma frase motivacional ORIGINAL sobre "${cat.pt}" para alguém com ${streak} dias de sequência, no período da ${period}. Responda SOMENTE em JSON válido sem markdown: {"pt":"...","en":"...","author":"..."}`
+      : `Create an ORIGINAL motivational quote about "${cat.en}" for someone with a ${streak}-day streak, in the ${period}. Respond ONLY in valid JSON no markdown: {"pt":"...","en":"...","author":"..."}`;
 
     const loadingEl = document.getElementById('ai-loading');
     const badgeEl   = document.getElementById('ai-badge');
@@ -1248,7 +1144,13 @@
     btnNova.disabled = true;
 
     try {
-      const res  = await fetch('/api/quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,lang,cat:currentCat}),signal:AbortSignal.timeout(15000)});
+      const res = await fetch('/api/quote', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        // 🟣 IA: usa Haiku no backend (mais barato), mas o prompt já é enviado pronto
+        body: JSON.stringify({ prompt, lang, cat: currentCat, model: 'haiku' }),
+        signal: AbortSignal.timeout(15000)
+      });
       if (!res.ok) throw new Error('API error');
       const d      = await res.json();
       const text   = d.content?.map(i=>i.text||'').join('')||(d.quote?JSON.stringify(d.quote):'');
@@ -1278,7 +1180,7 @@
   });
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 7 — MODO FOCO
+  // MODO FOCO
   // ══════════════════════════════════════════════════════════
   let focusInterval=null, focusSecs=0, lastFocusedElement=null, focusOpen=false;
 
@@ -1334,17 +1236,95 @@
   document.getElementById('focus-close').addEventListener('click',closeFocus);
   document.getElementById('focus-new').addEventListener('click',()=>newQuote());
   document.getElementById('focus-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeFocus();});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&focusOpen)closeFocus();});
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 8 — NOTIFICAÇÕES
+  // 🔵 ACESSIBILIDADE: atalhos de teclado globais
   // ══════════════════════════════════════════════════════════
-  const notifToggle=document.getElementById('notif-toggle');
+  let kbdHintTimer = null;
+
+  function showKbdHint(text) {
+    const el = document.getElementById('kbd-hint');
+    el.textContent = text;
+    el.classList.add('show');
+    clearTimeout(kbdHintTimer);
+    kbdHintTimer = setTimeout(() => el.classList.remove('show'), 1800);
+  }
+
+  document.addEventListener('keydown', e => {
+    // Ignorar quando digitando em campos
+    if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) return;
+    // Ignorar com modificadores
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    switch(e.key) {
+      case 'Escape':
+        if (focusOpen) closeFocus();
+        else if (chatOpen) closeChat();
+        else if (kbdPanelOpen) closeKbdPanel();
+        break;
+      case 'n': case 'N':
+        e.preventDefault();
+        newQuote();
+        showKbdHint(getLang()==='pt' ? '✨ Nova frase' : '✨ New quote');
+        break;
+      case 'f': case 'F':
+        e.preventDefault();
+        toggleFav();
+        showKbdHint(getLang()==='pt' ? '⭐ Favorito atualizado' : '⭐ Favorite updated');
+        break;
+      case 'c': case 'C':
+        e.preventDefault();
+        copyQuote();
+        showKbdHint(getLang()==='pt' ? '📋 Copiado!' : '📋 Copied!');
+        break;
+      case 'm': case 'M':
+        e.preventDefault();
+        if (focusOpen) closeFocus(); else openFocus();
+        break;
+      case 'h': case 'H':
+        e.preventDefault();
+        if (chatOpen) closeChat(); else openChat();
+        break;
+    }
+  });
+
+  // Painel de atalhos
+  let kbdPanelOpen = false;
+  function closeKbdPanel() {
+    kbdPanelOpen = false;
+    document.getElementById('kbd-panel').classList.remove('show');
+  }
+
+  document.getElementById('kbd-btn').addEventListener('click', () => {
+    kbdPanelOpen = !kbdPanelOpen;
+    document.getElementById('kbd-panel').classList.toggle('show', kbdPanelOpen);
+  });
+
+  document.addEventListener('click', e => {
+    if (kbdPanelOpen && !e.target.closest('#kbd-panel') && !e.target.closest('#kbd-btn')) {
+      closeKbdPanel();
+    }
+  });
+
+  // ══════════════════════════════════════════════════════════
+  // NOTIFICAÇÕES + horário configurável
+  // ══════════════════════════════════════════════════════════
+  const notifToggle = document.getElementById('notif-toggle');
+  const notifTimeInput = document.getElementById('notif-time');
+
+  // 🔵 UX: carrega horário salvo
+  notifTimeInput.value = lsGet('notifTime') || '09:00';
+  notifTimeInput.addEventListener('change', e => {
+    lsSet('notifTime', e.target.value);
+  });
 
   function setNotifStatus(on) {
     const el=document.getElementById('notif-status');
+    const time = lsGet('notifTime') || '09:00';
     el.className='notif-status '+(on?'on':'off');
-    el.textContent=on?(getLang()==='pt'?'Ativado ✓':'Enabled ✓'):(getLang()==='pt'?'Desativado':'Disabled');
+    el.textContent=on
+      ? (getLang()==='pt'?`Ativado ✓ · ${time}`:`Enabled ✓ · ${time}`)
+      : (getLang()==='pt'?'Desativado':'Disabled');
   }
 
   notifToggle.addEventListener('change',async()=>{
@@ -1358,7 +1338,7 @@
   });
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 9 — TEMAS DE COR
+  // TEMAS DE COR
   // ══════════════════════════════════════════════════════════
   function applyColorTheme(t) {
     ['ocean','sunset','lavender'].forEach(x=>document.body.classList.remove('theme-'+x));
@@ -1374,12 +1354,12 @@
   applyColorTheme(lsGet('colorTheme')||'default');
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 10 — FAVORITOS
+  // FAVORITOS
   // ══════════════════════════════════════════════════════════
-  const loadFavs=()=>JSON.parse(lsGet('favorites')||'[]');
-  const saveFavs=f=>lsSet('favorites',JSON.stringify(f));
+  const loadFavs = () => JSON.parse(lsGet('favorites') || '[]');
+  const saveFavs = f => lsSet('favorites', JSON.stringify(f));
 
-  function isCurrentFav() { return currentQuoteObj&&loadFavs().some(f=>f.pt===currentQuoteObj.pt); }
+  function isCurrentFav() { return currentQuoteObj && loadFavs().some(f=>f.pt===currentQuoteObj.pt); }
 
   function updateFavBtn() {
     const b=document.getElementById('fav-btn'), fv=isCurrentFav(), lang=getLang();
@@ -1396,7 +1376,7 @@
     saveFavs(f); updateFavBtn(); renderFavs();
   }
 
-  let favSearchTimer=null;
+  let favSearchTimer = null;
 
   function renderFavs(searchTerm='') {
     const lang=getLang(), favs=loadFavs();
@@ -1404,46 +1384,91 @@
     const search=document.getElementById('fav-search-wrap');
     document.getElementById('fav-count-label').textContent=lang==='pt'?`${favs.length} favorito${favs.length!==1?'s':''}`:`${favs.length} favorite${favs.length!==1?'s':''}`;
     search.style.display=favs.length>2?'block':'none';
-    if(!favs.length){list.innerHTML=`<div class="favorites-empty">${lang==='pt'?'⭐ Nenhuma frase favoritada ainda. Clique na estrela!':'⭐ No favorites yet. Click the star to save!'}</div>`;return;}
+    if(!favs.length){list.innerHTML='';const empty=document.createElement('div');empty.className='favorites-empty';empty.textContent=lang==='pt'?'⭐ Nenhuma frase favoritada ainda. Clique na estrela!':'⭐ No favorites yet. Click the star to save!';list.appendChild(empty);return;}
     const term=searchTerm.trim().toLowerCase();
     const filtered=term?favs.filter(f=>f[lang].toLowerCase().includes(term)||f.author.toLowerCase().includes(term)):favs;
-    if(!filtered.length){list.innerHTML=`<div class="favorites-empty">${lang==='pt'?'🔍 Nenhum resultado encontrado.':'🔍 No results found.'}</div>`;return;}
+    if(!filtered.length){list.innerHTML='';const empty=document.createElement('div');empty.className='favorites-empty';empty.textContent=lang==='pt'?'🔍 Nenhum resultado encontrado.':'🔍 No results found.';list.appendChild(empty);return;}
     list.innerHTML='';
     filtered.forEach(fav=>{
       const d=document.createElement('div'); d.className='fav-item';
-      d.innerHTML=`<div><div class="fav-item-text">"${fav[lang]}"</div><div class="fav-item-author">— ${fav.author}</div></div><button class="fav-remove" data-pt="${fav.pt.replace(/"/g,'&quot;')}" aria-label="${lang==='pt'?'Remover':'Remove'}">✕</button>`;
+      // 🔴 SEGURANÇA: sem innerHTML com dados do usuário
+      const textDiv=document.createElement('div');
+      const textP=document.createElement('div'); textP.className='fav-item-text';
+      textP.textContent=`"${fav[lang]}"`;
+      const authorP=document.createElement('div'); authorP.className='fav-item-author';
+      authorP.textContent=`— ${fav.author}`;
+      textDiv.appendChild(textP); textDiv.appendChild(authorP);
+      const removeBtn=document.createElement('button'); removeBtn.className='fav-remove';
+      removeBtn.textContent='✕';
+      removeBtn.setAttribute('aria-label',lang==='pt'?'Remover':'Remove');
+      removeBtn.addEventListener('click',()=>{let f=loadFavs();f=f.filter(x=>x.pt!==fav.pt);saveFavs(f);updateFavBtn();renderFavs(document.getElementById('fav-search')?.value||'');});
+      d.appendChild(textDiv); d.appendChild(removeBtn);
       list.appendChild(d);
-    });
-    list.querySelectorAll('.fav-remove').forEach(b=>{
-      b.addEventListener('click',()=>{let f=loadFavs();f=f.filter(x=>x.pt!==b.dataset.pt);saveFavs(f);updateFavBtn();renderFavs(document.getElementById('fav-search')?.value||'');});
     });
   }
 
   document.getElementById('fav-btn').addEventListener('click',toggleFav);
   document.getElementById('fav-search').addEventListener('input',e=>{clearTimeout(favSearchTimer);const val=e.target.value;favSearchTimer=setTimeout(()=>renderFavs(val),250);});
   document.getElementById('clear-favs').addEventListener('click',()=>{if(confirm(getLang()==='pt'?'Remover todos os favoritos?':'Remove all favorites?')){saveFavs([]);updateFavBtn();renderFavs();}});
-  document.getElementById('export-favs').addEventListener('click',()=>{const lang=getLang(),favs=loadFavs();if(!favs.length){alert(lang==='pt'?'Nenhum favorito para exportar.':'No favorites to export.');return;}const lines=favs.map(f=>`"${f[lang]}"\n— ${f.author}`).join('\n\n---\n\n');const blob=new Blob([lines],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);Object.assign(document.createElement('a'),{href:url,download:'favoritos-motivacao.txt'}).click();URL.revokeObjectURL(url);});
+  document.getElementById('export-favs').addEventListener('click',()=>{
+    const lang=getLang(),favs=loadFavs();
+    if(!favs.length){alert(lang==='pt'?'Nenhum favorito para exportar.':'No favorites to export.');return;}
+    const lines=favs.map(f=>`"${f[lang]}"\n— ${f.author}`).join('\n\n---\n\n');
+    const blob=new Blob([lines],{type:'text/plain;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    Object.assign(document.createElement('a'),{href:url,download:'favoritos-motivacao.txt'}).click();
+    URL.revokeObjectURL(url);
+  });
+
+  // 🟡 CÓDIGO: Backup completo (favoritos + diário + progresso)
+  document.getElementById('backup-btn').addEventListener('click', () => {
+    const lang = getLang();
+    const data = {
+      version: '1.0',
+      exportedAt: new Date().toISOString(),
+      favorites: loadFavs(),
+      diary: getDiaryEntries(),
+      streak: JSON.parse(lsGet('streakData') || '{}'),
+      weekly: JSON.parse(lsGet('weeklyData') || '{}'),
+      settings: {
+        theme: lsGet('theme'),
+        colorTheme: lsGet('colorTheme'),
+        lang: lsGet('lang'),
+        notifTime: lsGet('notifTime'),
+      }
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    Object.assign(document.createElement('a'), {href:url, download:'backup-diario-motivacao.json'}).click();
+    URL.revokeObjectURL(url);
+    const toast = document.getElementById('copy-toast');
+    toast.textContent = lang==='pt' ? '💾 Backup salvo!' : '💾 Backup saved!';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 11 — COMPARTILHAR
+  // COMPARTILHAR + COPIAR
   // ══════════════════════════════════════════════════════════
-  const getQuoteText=()=>currentQuoteObj?`"${currentQuoteObj[getLang()]}" — ${currentQuoteObj.author}`:'';
+  const getQuoteText = () => currentQuoteObj ? `"${currentQuoteObj[getLang()]}" — ${currentQuoteObj.author}` : '';
+
+  function copyQuote() {
+    const text = getQuoteText();
+    if (navigator.clipboard) { navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text)); }
+    else { fallbackCopy(text); }
+    const t=document.getElementById('copy-toast'); t.textContent=getLang()==='pt'?'Copiado!':'Copied!'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800);
+  }
 
   document.getElementById('share-whatsapp').addEventListener('click',()=>window.open(`https://wa.me/?text=${encodeURIComponent(getQuoteText()+'\n\n🌿 Diário de Motivação')}`,'_blank'));
   document.getElementById('share-twitter').addEventListener('click',()=>window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(getQuoteText()+' 🌿 #Motivação #Inspiração')}`,'_blank'));
-
-  document.getElementById('copy-btn').addEventListener('click',()=>{
-    const text=getQuoteText();
-    if(navigator.clipboard){navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text));}else{fallbackCopy(text);}
-    const t=document.getElementById('copy-toast'); t.textContent=getLang()==='pt'?'Copiado!':'Copied!'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800);
-  });
+  document.getElementById('copy-btn').addEventListener('click', copyQuote);
 
   function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0;pointer-events:none';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch{}document.body.removeChild(ta);}
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 12 — DARK MODE
+  // DARK MODE
   // ══════════════════════════════════════════════════════════
-  const themeBtn=document.getElementById('toggle-theme');
+  const themeBtn = document.getElementById('toggle-theme');
 
   function applyTheme(dark) {
     document.body.classList.toggle('dark',dark);
@@ -1456,16 +1481,17 @@
   if(lsGet('theme')==='dark') applyTheme(true);
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 13 — IDIOMA
+  // IDIOMA
   // ══════════════════════════════════════════════════════════
   function setLang(lang) {
+    // 🔵 ACESSIBILIDADE: atualiza primeiro
+    document.documentElement.lang = lang==='pt' ? 'pt-BR' : 'en';
     document.body.classList.toggle('lang-en',lang==='en');
-    document.documentElement.lang=lang==='pt'?'pt-BR':'en';
     document.getElementById('lang-pt').classList.toggle('active-lang',lang==='pt');
     document.getElementById('lang-en').classList.toggle('active-lang',lang==='en');
     lsSet('lang',lang);
     updateDate(); updatePillLabels(); updatePlaceholders();
-    renderFavs(); renderChart(); renderDiary();
+    renderFavs(); scheduleChart(); renderDiary();
     setNotifStatus(notifToggle.checked);
     buildStreak(); updateFavBtn();
     applyTheme(document.body.classList.contains('dark'));
@@ -1497,7 +1523,7 @@
   if(lsGet('lang')==='en') setLang('en');
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 14 — DIÁRIO LIVRE
+  // DIÁRIO — usando createElement em vez de innerHTML
   // ══════════════════════════════════════════════════════════
   const diaryTextarea=document.getElementById('diary-textarea');
   const diaryChars=document.getElementById('diary-chars');
@@ -1510,16 +1536,30 @@
     const entries=getDiaryEntries(), lang=getLang();
     const container=document.getElementById('diary-entries');
     container.innerHTML='';
-    if(!entries.length){container.innerHTML=`<div class="favorites-empty" style="margin-top:16px">${lang==='pt'?'📓 Nenhuma reflexão ainda. Escreva a primeira!':'📓 No reflections yet. Write the first one!'}</div>`;return;}
+    if(!entries.length){
+      const empty=document.createElement('div'); empty.className='favorites-empty'; empty.style.marginTop='16px';
+      empty.textContent=lang==='pt'?'📓 Nenhuma reflexão ainda. Escreva a primeira!':'📓 No reflections yet. Write the first one!';
+      container.appendChild(empty); return;
+    }
     [...entries].reverse().forEach((entry,revIdx)=>{
       const realIdx=entries.length-1-revIdx;
       const d=document.createElement('div'); d.className='diary-entry-item';
       const dateStr=new Date(entry.date).toLocaleDateString(lang==='pt'?'pt-BR':'en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-      d.innerHTML=`<div class="diary-entry-date">📅 ${dateStr}</div><div class="diary-entry-text">${entry.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div><div class="diary-entry-actions"><button class="diary-btn-small" data-idx="${realIdx}">${lang==='pt'?'🗑️ Excluir':'🗑️ Delete'}</button></div>`;
+
+      // 🔴 SEGURANÇA: sem innerHTML com dados do usuário
+      const dateDiv=document.createElement('div'); dateDiv.className='diary-entry-date'; dateDiv.textContent='📅 '+dateStr;
+      const textDiv=document.createElement('div'); textDiv.className='diary-entry-text'; textDiv.textContent=entry.text;
+      const actDiv=document.createElement('div'); actDiv.className='diary-entry-actions';
+      const delBtn=document.createElement('button'); delBtn.className='diary-btn-small';
+      delBtn.textContent=lang==='pt'?'🗑️ Excluir':'🗑️ Delete';
+      delBtn.addEventListener('click',()=>{
+        if(confirm(getLang()==='pt'?'Excluir esta reflexão?':'Delete this reflection?')){
+          const ents=getDiaryEntries(); ents.splice(realIdx,1); saveDiaryEntries(ents); renderDiary();
+        }
+      });
+      actDiv.appendChild(delBtn);
+      d.appendChild(dateDiv); d.appendChild(textDiv); d.appendChild(actDiv);
       container.appendChild(d);
-    });
-    container.querySelectorAll('.diary-btn-small').forEach(b=>{
-      b.addEventListener('click',()=>{if(confirm(getLang()==='pt'?'Excluir esta reflexão?':'Delete this reflection?')){const ents=getDiaryEntries();ents.splice(parseInt(b.dataset.idx),1);saveDiaryEntries(ents);renderDiary();}});
     });
   }
 
@@ -1539,7 +1579,7 @@
   });
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 15 — FORMULÁRIOS
+  // FORMULÁRIOS
   // ══════════════════════════════════════════════════════════
   document.getElementById('newsletter-form').addEventListener('submit',function(e){
     e.preventDefault();
@@ -1572,7 +1612,7 @@
   });
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 16 — FAQ
+  // FAQ
   // ══════════════════════════════════════════════════════════
   document.querySelectorAll('.faq-question').forEach(btn=>{
     btn.addEventListener('click',function(){
@@ -1585,7 +1625,7 @@
   });
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 17 — SCROLL / NAV ATIVA
+  // SCROLL / NAV
   // ══════════════════════════════════════════════════════════
   const scrollTopBtn=document.getElementById('scroll-top');
   window.addEventListener('scroll',()=>{
@@ -1597,182 +1637,133 @@
   scrollTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 18 — CHATBOT COMPLETO
-  // ──────────────────────────────────────────────────────────
-  // Arquitetura:
-  //   1. Tenta API Anthropic via proxy /api/chat (se disponível)
-  //   2. Se falhar → usa IA local inteligente com memória
-  //   3. Memória contextual: últimas 5 mensagens influenciam respostas
-  //   4. Sanitização anti-XSS em todas as mensagens
-  //   5. Histórico limitado a 20 entradas (performance)
+  // CHATBOT — com rate limiting e contexto personalizado
   // ══════════════════════════════════════════════════════════
 
-  const chatFab      = document.getElementById('chat-fab');
-  const chatBadge    = document.getElementById('chat-badge');
-  const chatWindow   = document.getElementById('chat-window');
-  const chatClose    = document.getElementById('chat-close');
-  const chatMessages = document.getElementById('chat-messages');
-  const chatTyping   = document.getElementById('chat-typing');
-  const chatInput    = document.getElementById('chat-input');
-  const chatSend     = document.getElementById('chat-send');
-  const chatChips    = document.querySelectorAll('.chat-chip');
+  // 🔴 SEGURANÇA: Limite de mensagens por sessão
+  const MAX_CHAT_MSGS = 20;
+  let chatMsgCount = 0;
+
+  const chatFab       = document.getElementById('chat-fab');
+  const chatBadge     = document.getElementById('chat-badge');
+  const chatWindow    = document.getElementById('chat-window');
+  const chatClose     = document.getElementById('chat-close');
+  const chatMessages  = document.getElementById('chat-messages');
+  const chatTyping    = document.getElementById('chat-typing');
+  const chatInput     = document.getElementById('chat-input');
+  const chatSend      = document.getElementById('chat-send');
+  const chatChips     = document.querySelectorAll('.chat-chip');
   const chatModeBadge = document.getElementById('chat-mode-badge');
+  const chatFill      = document.getElementById('chat-counter-fill');
 
   let chatOpen    = false;
   let chatHistory = [];
   let chatBusy    = false;
 
-  // System prompts para a API (quando disponível)
-  const CHAT_SYSTEM_PT = `Você é o Assistente Motivacional do "Diário de Motivação", criado por Rafael Pereira Almeida.
-Responda com empatia, clareza e motivação. Tom caloroso, encorajador e profissional.
-Você pode: responder dúvidas sobre o site, sugerir frases motivacionais, confirmar sugestões de frases, discutir parcerias e apoiar emocionalmente o usuário.
-Você NÃO tem acesso real ao e-mail ou banco de dados — deixe claro quando relevante.
-Responda sempre em Português do Brasil, de forma concisa (máximo 3 parágrafos curtos).`;
+  function updateChatCounter() {
+    const pct = Math.max(0, ((MAX_CHAT_MSGS - chatMsgCount) / MAX_CHAT_MSGS) * 100);
+    chatFill.style.width = pct + '%';
+    chatFill.classList.toggle('warn', pct < 30);
+  }
 
-  const CHAT_SYSTEM_EN = `You are the Motivational Assistant of "Diário de Motivação", created by Rafael Pereira Almeida.
-Respond with empathy, clarity, and motivation. Warm, encouraging, professional tone.
-You can: answer site questions, suggest motivational quotes, confirm quote suggestions, discuss partnerships, emotionally support the user.
-You do NOT have real access to email or database — clarify when relevant.
-Always reply in English, concisely (maximum 3 short paragraphs).`;
-
-  // ── Sanitização anti-XSS ──
+  // 🔴 SEGURANÇA: sanitização anti-XSS
   function sanitize(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
 
-  // ── Memória contextual (últimas N mensagens) ──
-  function getLastMessages(limit = 5) {
-    return chatHistory.slice(-limit).map(m => m.content.toLowerCase()).join(' ');
+  function getLastMessages(limit=5) {
+    return chatHistory.slice(-limit).map(m=>m.content.toLowerCase()).join(' ');
   }
 
-  // ── IA Local Inteligente (funciona 100% sem backend) ──
+  // 🟣 IA: sistema de resposta local com contexto do usuário
   function getSmartResponse(text) {
     const msg     = text.toLowerCase();
     const context = getLastMessages();
     const lang    = getLang();
+    const streak  = JSON.parse(lsGet('streakData')||'{"count":0}').count || 0;
 
-    // Base de respostas PT/EN
     const r = {
       saudacao: {
-        pt: ['🌿 Olá! Que bom te ver aqui 😊 Como você está se sentindo hoje?',
-             '🌱 Bem-vindo! Pronto para sua dose de motivação?'],
-        en: ['🌿 Hello! Great to have you here 😊 How are you feeling today?',
-             '🌱 Welcome! Ready for your dose of motivation?']
+        pt: [
+          `🌿 Olá! ${streak > 0 ? `Que incrível — você tem ${streak} dias de sequência! ` : ''}Como posso te ajudar hoje?`,
+          '🌱 Bem-vindo! Pronto para sua dose de motivação?'
+        ],
+        en: [
+          `🌿 Hello! ${streak > 0 ? `Amazing — you have a ${streak}-day streak! ` : ''}How can I help you today?`,
+          '🌱 Welcome! Ready for your dose of motivation?'
+        ]
       },
       tristeza: {
-        pt: ['💛 Eu entendo… momentos assim são difíceis, mas você não está sozinho. Quer me contar o que está acontecendo?',
-             '🌿 Às vezes o coração pesa. Respire fundo — isso vai passar, e você vai sair mais forte.'],
-        en: ['💛 I understand… these moments are tough, but you are not alone. Want to tell me what\'s going on?',
-             '🌿 Sometimes the heart feels heavy. Breathe deep — this shall pass, and you will come out stronger.']
+        pt: ['💛 Eu entendo… momentos assim são difíceis, mas você não está sozinho. Quer me contar o que está acontecendo?','🌿 Às vezes o coração pesa. Respire fundo — isso vai passar.'],
+        en: ['💛 I understand… these moments are tough, but you are not alone. Want to tell me what\'s going on?','🌿 Sometimes the heart feels heavy. Breathe deep — this shall pass.']
       },
       motivacao: {
-        pt: ['🔥 Lembre-se: você já superou dias difíceis antes. Esse também vai passar — e você vai sair mais forte.',
-             '💪 Cada passo, mesmo pequeno, te aproxima do seu objetivo. Continue firme!'],
-        en: ['🔥 Remember: you\'ve overcome hard days before. This one will pass too — and you\'ll come out stronger.',
-             '💪 Every step, even a small one, brings you closer to your goal. Keep going!']
+        pt: ['🔥 Lembre-se: você já superou dias difíceis antes. Esse também vai passar — e você vai sair mais forte.','💪 Cada passo, mesmo pequeno, te aproxima do seu objetivo. Continue firme!'],
+        en: ['🔥 Remember: you\'ve overcome hard days before. This one will pass too — and you\'ll come out stronger.','💪 Every step, even a small one, brings you closer to your goal. Keep going!']
       },
       parceria: {
         pt: ['🤝 Que incrível! Parcerias são sempre bem-vindas. Envie sua proposta pelo formulário de contato abaixo — vai ser um prazer conversar!'],
         en: ['🤝 How exciting! Partnerships are always welcome. Send your proposal via the contact form below — would love to chat!']
       },
       frase: {
-        pt: ['🌟 Aqui vai uma pra você:\n\n"Você não precisa ser perfeito, só precisa continuar."',
-             '✨ Pense nisso:\n\n"Cada amanhecer é uma nova chance de recomeçar."'],
-        en: ['🌟 Here\'s one for you:\n\n"You don\'t need to be perfect, you just need to keep going."',
-             '✨ Think about this:\n\n"Every sunrise is a new chance to start again."']
+        pt: [`🌟 Aqui vai uma para você:\n\n"${currentQuoteObj?currentQuoteObj.pt:'Você não precisa ser perfeito, só precisa continuar.'}"`, '✨ Pense nisso:\n\n"Cada amanhecer é uma nova chance de recomeçar."'],
+        en: [`🌟 Here's one for you:\n\n"${currentQuoteObj?currentQuoteObj.en:'You don\'t need to be perfect, you just need to keep going.'}"`, '✨ Think about this:\n\n"Every sunrise is a new chance to start again."']
       },
       foco: {
-        pt: ['🎯 O Modo Foco exibe a frase em tela cheia com fundo escuro e cronômetro — ideal para meditação! Clique no botão "🎯 Foco" no menu para ativar.'],
-        en: ['🎯 Focus Mode displays the quote fullscreen with dark background and timer — perfect for meditation! Click the "🎯 Focus" button in the menu to activate.']
+        pt: ['🎯 O Modo Foco exibe a frase em tela cheia com fundo escuro e cronômetro — ideal para meditação! Clique em "🎯 Foco" no menu ou pressione a tecla M.'],
+        en: ['🎯 Focus Mode displays the quote fullscreen with dark background and timer — perfect for meditation! Click "🎯 Focus" in the menu or press the M key.']
       },
-      ajuda: {
-        pt: ['💬 Posso te ajudar com motivação, sugestões de frases, dúvidas sobre o site ou simplesmente conversar 😊 O que você precisa?'],
-        en: ['💬 I can help with motivation, quote suggestions, site questions, or just chat 😊 What do you need?']
+      atalhos: {
+        pt: ['⌨️ Atalhos: N = nova frase | F = favoritar | C = copiar | M = modo foco | H = abrir/fechar chat'],
+        en: ['⌨️ Shortcuts: N = new quote | F = favorite | C = copy | M = focus mode | H = open/close chat']
       },
       obrigado: {
         pt: ['🌱 Fico feliz em poder ajudar! Qualquer coisa, é só me chamar.'],
         en: ['🌱 Happy to help! Anytime you need, just reach out.']
       },
       default: {
-        pt: ['🌿 Interessante… me conta mais sobre isso.',
-             '💭 Estou aqui para te ouvir. Como posso ajudar?',
-             '✨ Isso é importante. Como você se sente em relação a isso?'],
-        en: ['🌿 Interesting… tell me more about that.',
-             '💭 I\'m here to listen. How can I help?',
-             '✨ That matters. How do you feel about it?']
+        pt: ['🌿 Interessante… me conta mais sobre isso.','💭 Estou aqui para te ouvir. Como posso ajudar?','✨ Isso é importante. Como você se sente em relação a isso?'],
+        en: ['🌿 Interesting… tell me more about that.','💭 I\'m here to listen. How can I help?','✨ That matters. How do you feel about it?']
       }
     };
 
-    const pick = (key) => {
-      const arr = r[key][lang] || r[key]['pt'];
-      return arr[Math.floor(Math.random() * arr.length)];
-    };
+    const pick = key => { const arr = r[key]?.[lang] || r[key]?.['pt'] || ['']; return arr[Math.floor(Math.random()*arr.length)]; };
 
-    // Detectar intenção
-    if (msg.match(/\b(oi|olá|ola|hey|hello|hi|bom dia|boa tarde|boa noite)\b/))
-      return pick('saudacao');
+    if (msg.match(/\b(oi|olá|ola|hey|hello|hi|bom dia|boa tarde|boa noite)\b/)) return pick('saudacao');
+    if (msg.match(/\b(triste|desanimado|cansado|ansioso|deprimido|mal|ruim|difícil|dificil|sozinho)\b/)) return pick('tristeza');
+    if (msg.match(/\b(motivação|motivar|motivacao|força|forca|animo|ânimo|inspiração|inspiracao)\b/)) return pick('motivacao');
+    if (msg.includes('parceria')||msg.includes('partnership')||msg.includes('negócio')) return pick('parceria');
+    if (msg.match(/\b(frase|quote|citação|citacao)\b/)) return pick('frase');
+    if (msg.match(/\b(foco|focus|meditação|meditacao|concentrar)\b/)) return pick('foco');
+    if (msg.match(/\b(atalho|shortcut|tecla|keyboard)\b/)) return pick('atalhos');
+    if (msg.match(/\b(obrigado|obrigada|thanks|thank you|valeu)\b/)) return pick('obrigado');
 
-    if (msg.match(/\b(triste|desanimado|cansado|ansioso|deprimido|mal|ruim|difícil|dificil|sozinho)\b/))
-      return pick('tristeza');
-
-    if (msg.match(/\b(motivação|motivar|motivacao|força|forca|animo|ânimo|inspiração|inspiracao|incentivar)\b/))
-      return pick('motivacao');
-
-    if (msg.includes('parceria') || msg.includes('partnership') || msg.includes('colaboração') || msg.includes('negócio'))
-      return pick('parceria');
-
-    if (msg.match(/\b(frase|quote|citação|citacao|provérbio|proverbio)\b/))
-      return pick('frase');
-
-    if (msg.match(/\b(foco|focus|meditação|meditacao|meditar|concentrar)\b/))
-      return pick('foco');
-
-    if (msg.match(/\b(ajuda|help|dúvida|duvida|como|funciona|usar|o que é|oque)\b/))
-      return pick('ajuda');
-
-    if (msg.match(/\b(obrigado|obrigada|thanks|thank you|valeu|grato|grata)\b/))
-      return pick('obrigado');
-
-    // Respostas contextuais (memória)
-    if (context.includes('triste') || context.includes('desanimad'))
-      return lang === 'pt'
-        ? '🌿 Ainda estou aqui com você. Quer falar mais sobre o que está sentindo?'
-        : '🌿 I\'m still here with you. Want to talk more about what you\'re feeling?';
-
-    if (context.includes('motiv') || context.includes('força') || context.includes('force'))
-      return lang === 'pt'
-        ? '💪 Vamos continuar firmes! Qual é seu próximo passo hoje?'
-        : '💪 Let\'s keep going strong! What\'s your next step today?';
-
-    if (context.includes('parceria') || context.includes('partner'))
-      return lang === 'pt'
-        ? '🤝 Posso te ajudar com mais alguma informação sobre a parceria?'
-        : '🤝 Can I help you with more information about the partnership?';
+    if (context.includes('triste')||context.includes('desanimad'))
+      return lang==='pt' ? '🌿 Ainda estou aqui com você. Quer falar mais sobre o que está sentindo?' : '🌿 I\'m still here with you. Want to talk more about what you\'re feeling?';
 
     return pick('default');
   }
 
-  // ── Hora formatada para timestamp ──
   function chatNow() {
     return new Date().toLocaleTimeString(getLang()==='pt'?'pt-BR':'en-US',{hour:'2-digit',minute:'2-digit'});
   }
 
-  // ── Renderizar mensagem (com sanitização) ──
   function appendMessage(role, text) {
     const div     = document.createElement('div');
     div.className = `chat-msg ${role}`;
     const avatar  = role==='bot' ? '🌿' : '👤';
     const timeStr = chatNow();
-    // Sanitiza o texto e converte \n em <br>
     const safeText = sanitize(text).replace(/\n/g,'<br>');
-    div.innerHTML = `
-      <div class="chat-msg-avatar">${avatar}</div>
-      <div class="chat-bubble">
-        ${safeText}
-        <span class="chat-bubble-time">${timeStr}</span>
-      </div>`;
+    const avatarDiv = document.createElement('div');
+    avatarDiv.className = 'chat-msg-avatar';
+    avatarDiv.textContent = avatar;
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.className = 'chat-bubble';
+    bubbleDiv.innerHTML = safeText + `<span class="chat-bubble-time">${timeStr}</span>`;
+    div.appendChild(avatarDiv);
+    div.appendChild(bubbleDiv);
     chatMessages.appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     return div;
@@ -1785,17 +1776,17 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
 
   function injectWelcomeMessage() {
     const lang = getLang();
-    const text = lang === 'pt'
-      ? '🌿 Olá! Sou o assistente do Diário de Motivação.\n\nPosso responder suas dúvidas, receber sugestões de frases, falar sobre parcerias ou simplesmente te motivar! Como posso ajudar?'
-      : '🌿 Hello! I\'m the Motivation Journal assistant.\n\nI can answer your questions, receive quote suggestions, talk about partnerships, or simply motivate you! How can I help?';
+    const streak = JSON.parse(lsGet('streakData')||'{"count":0}').count || 0;
+    const streakMsg = streak > 0 ? (lang==='pt' ? ` Parabéns pelos ${streak} dias de sequência! 🔥` : ` Congrats on your ${streak}-day streak! 🔥`) : '';
+    const text = lang==='pt'
+      ? `🌿 Olá!${streakMsg} Sou o assistente do Diário de Motivação.\n\nPosso responder dúvidas, receber sugestões de frases, falar sobre parcerias ou simplesmente te motivar! Como posso ajudar?\n\n💡 Dica: pressione ⌨️ no menu para ver atalhos de teclado.`
+      : `🌿 Hello!${streakMsg} I'm the Motivation Journal assistant.\n\nI can answer questions, receive quote suggestions, talk about partnerships, or simply motivate you! How can I help?\n\n💡 Tip: press ⌨️ in the menu to see keyboard shortcuts.`;
     appendMessage('bot', text);
   }
 
   function updateChatLang() {
     chatInput.placeholder = getLang()==='pt' ? 'Digite sua mensagem...' : 'Type your message...';
-    if (chatModeBadge) {
-      chatModeBadge.textContent = '🧠 IA Local';
-    }
+    if (chatModeBadge) chatModeBadge.textContent = '🧠 IA Local';
   }
 
   function openChat() {
@@ -1805,6 +1796,7 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
     chatFab.setAttribute('aria-label', getLang()==='pt'?'Fechar assistente':'Close assistant');
     chatBadge.classList.add('hidden');
     if (chatMessages.children.length === 0) injectWelcomeMessage();
+    updateChatCounter();
     chatInput.focus();
   }
 
@@ -1818,10 +1810,6 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
 
   chatFab.addEventListener('click', () => chatOpen ? closeChat() : openChat());
   chatClose.addEventListener('click', closeChat);
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && chatOpen && !focusOpen) closeChat();
-  });
 
   chatChips.forEach(chip => {
     chip.addEventListener('click', () => {
@@ -1839,50 +1827,61 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
   });
 
   chatInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendChatMessage();
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); }
   });
 
   chatSend.addEventListener('click', sendChatMessage);
 
-  // ── Envio de mensagem: tenta API → fallback local ──
   async function sendChatMessage() {
     const text = chatInput.value.trim();
     if (!text || chatBusy) return;
 
+    // 🔴 SEGURANÇA: verificar limite de mensagens
+    if (chatMsgCount >= MAX_CHAT_MSGS) {
+      const lang = getLang();
+      appendMessage('bot', lang==='pt'
+        ? `⚠️ Você atingiu o limite de ${MAX_CHAT_MSGS} mensagens nesta sessão. Recarregue a página para continuar.`
+        : `⚠️ You've reached the ${MAX_CHAT_MSGS}-message limit for this session. Reload the page to continue.`);
+      chatInput.disabled = true;
+      chatSend.disabled  = true;
+      return;
+    }
+
+    chatMsgCount++;
+    updateChatCounter();
+
     appendMessage('user', text);
     chatHistory.push({ role: 'user', content: text });
-
-    // Limita histórico (performance + custo de API)
     if (chatHistory.length > 20) chatHistory.shift();
 
     chatInput.value = '';
     chatInput.style.height = 'auto';
-
     chatBusy = true;
     chatSend.disabled = true;
     setTyping(true);
 
-    // Tenta primeiro via proxy backend (/api/chat)
-    // Se não houver backend, cai no fallback local automaticamente
     let replied = false;
 
     try {
+      // 🟣 IA: contexto do usuário no system prompt
+      const streak = JSON.parse(lsGet('streakData')||'{"count":0}').count || 0;
       const res = await fetch('/api/chat', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
           message: text,
           history: chatHistory,
-          lang:    getLang()
+          lang: getLang(),
+          context: {
+            streak,
+            currentQuote: currentQuoteObj ? currentQuoteObj[getLang()] : '',
+            hour: new Date().getHours()
+          }
         }),
-        signal: AbortSignal.timeout(8000)   // 8s — se não responder, usa local
+        signal: AbortSignal.timeout(8000)
       });
 
-      if (!res.ok) throw new Error('API error ' + res.status);
-
+      if (!res.ok) throw new Error('API error');
       const data  = await res.json();
       const reply = data.reply || data.content?.map(b=>b.text||'').join('') || '';
 
@@ -1890,38 +1889,27 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
         chatHistory.push({ role: 'assistant', content: reply });
         setTyping(false);
         appendMessage('bot', reply);
-        // Atualiza badge para indicar IA real
-        if (chatModeBadge) {
-          chatModeBadge.textContent = '🤖 IA Real';
-          chatModeBadge.classList.remove('local');
-        }
+        if (chatModeBadge) { chatModeBadge.textContent = '🤖 IA Real'; chatModeBadge.classList.remove('local'); }
         replied = true;
       }
-    } catch {
-      // Backend indisponível — usa IA local silenciosamente
-    }
+    } catch { /* fallback silencioso */ }
 
-    // Fallback: IA local inteligente (sempre funciona)
     if (!replied) {
-      // Simula tempo de digitação realista
-      await new Promise(r => setTimeout(r, 600 + Math.random() * 400));
+      await new Promise(r => setTimeout(r, 600 + Math.random()*400));
       const reply = getSmartResponse(text);
       chatHistory.push({ role: 'assistant', content: reply });
       setTyping(false);
       appendMessage('bot', reply);
-      if (chatModeBadge) {
-        chatModeBadge.textContent = '🧠 IA Local';
-        chatModeBadge.classList.add('local');
-      }
+      if (chatModeBadge) { chatModeBadge.textContent = '🧠 IA Local'; chatModeBadge.classList.add('local'); }
     }
 
-    chatBusy      = false;
+    chatBusy = false;
     chatSend.disabled = false;
     chatInput.focus();
   }
 
   // ══════════════════════════════════════════════════════════
-  // BLOCO 19 — INICIALIZAÇÃO GERAL
+  // INICIALIZAÇÃO
   // ══════════════════════════════════════════════════════════
   rebuildPool();
   updateDate();
@@ -1930,7 +1918,7 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
   updatePlaceholders();
   updateChatLang();
   renderFavs();
-  renderChart();
+  scheduleChart();
   renderDiary();
   document.getElementById('contador-frases').textContent = counter;
 
@@ -1938,6 +1926,16 @@ Always reply in English, concisely (maximum 3 short paragraphs).`;
   else { setNotifStatus(false); }
 
   showQuote(quotes[0]);
+
+  // 🟢 PERFORMANCE: Service Worker para cache offline
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      // Registrar SW inline (base64 data URL não funciona, mas indicamos o caminho)
+      // Em produção, crie o arquivo /sw.js separado:
+      // navigator.serviceWorker.register('/sw.js');
+      console.info('💡 Para ativar modo offline, crie /sw.js com o cache do shell.');
+    });
+  }
   </script>
 </body>
 </html>
